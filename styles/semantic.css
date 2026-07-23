@@ -1,0 +1,92 @@
+:root {
+  --background: #FFFDFD;
+  --surface: #F3F9F9;
+  --surface-raised: white;
+  --surface-muted: var(--gray-100);
+
+  --foreground: var(--teal-900);
+  --foreground-muted: var(--gray-600);
+  --foreground-subtle: var(--gray-500);
+  --foreground-inverse: var(--gray-50);
+
+  --highlight: var(--teal-600);
+  --highlight-soft: var(--teal-500);
+  --table-header: color-mix(in oklch, var(--teal-800) 80%, transparent);
+
+  --primary: var(--highlight);
+  --primary-hover: var(--highlight);
+  --primary-active: var(--highlight);
+  --primary-foreground: white;
+
+  --secondary: var(--gray-200);
+  --secondary-hover: var(--gray-300);
+  --secondary-active: var(--gray-400);
+  --secondary-foreground: var(--teal-900);
+
+  --accent: var(--pink-600);
+  --accent-hover: var(--pink-700);
+  --accent-foreground: white;
+
+  --border: var(--gray-300);
+  --input: var(--gray-300);
+  --ring: var(--highlight);
+
+  --success: var(--green-700);
+  --success-foreground: white;
+  --warning: var(--yellow-600);
+  --warning-foreground: var(--gray-900);
+  --destructive: var(--red-700);
+  --destructive-hover: var(--red-800);
+  --destructive-active: var(--red-900);
+  --destructive-foreground: white;
+
+  --disabled: var(--gray-200);
+  --disabled-foreground: var(--gray-500);
+
+  --radius: 20px;
+}
+
+.dark {
+  --background: var(--gray-900);
+  --surface: var(--gray-800);
+  --surface-raised: var(--gray-700);
+  --surface-muted: var(--gray-800);
+
+  --foreground: var(--gray-50);
+  --foreground-muted: var(--gray-300);
+  --foreground-subtle: var(--gray-400);
+  --foreground-inverse: var(--gray-900);
+
+  --highlight: var(--teal-600);
+  --table-header: color-mix(in oklch, var(--teal-300) 80%, transparent);
+
+  --primary: var(--highlight);
+  --primary-hover: var(--highlight);
+  --primary-active: var(--highlight);
+  --primary-foreground: var(--gray-900);
+
+  --secondary: var(--gray-700);
+  --secondary-hover: var(--gray-600);
+  --secondary-active: var(--gray-500);
+  --secondary-foreground: var(--gray-50);
+
+  --accent: var(--pink-400);
+  --accent-hover: var(--pink-300);
+  --accent-foreground: var(--gray-900);
+
+  --border: color-mix(in oklch, var(--gray-600) 70%, transparent);
+  --input: var(--gray-600);
+  --ring: var(--highlight);
+
+  --success: var(--green-400);
+  --success-foreground: var(--gray-900);
+  --warning: var(--yellow-300);
+  --warning-foreground: var(--gray-900);
+  --destructive: var(--red-400);
+  --destructive-hover: var(--red-300);
+  --destructive-active: var(--red-200);
+  --destructive-foreground: var(--gray-900);
+
+  --disabled: var(--gray-700);
+  --disabled-foreground: var(--gray-400);
+}

@@ -1,0 +1,135 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  BarChart3,
+  Boxes,
+  FileText,
+  Home,
+  Package,
+  ReceiptText,
+  WalletCards,
+} from "lucide-react";
+import { BrandLogo } from "@/components/ui/brand-logo";
+import { cn } from "@/lib/utils";
+import { TwoSparklesIcon } from "./icons/TwoSparklesIcon";
+
+const navItems = [
+  {
+    title: "Daily Sales",
+    subtitle: "နေ့စဉ်အရောင်းစာရင်း",
+    href: "/daily-sales",
+    icon: BarChart3,
+  },
+  {
+    title: "Inventory",
+    subtitle: "ပစ္စည်း စီမံခန့်ခွဲ",
+    href: "/inventory",
+    icon: Boxes,
+  },
+  {
+    title: "Products",
+    subtitle: "ပစ္စည်းလက်ကျန်",
+    href: "/products",
+    icon: Package,
+  },
+  {
+    title: "Expenses",
+    subtitle: "အသုံးစရိတ်",
+    href: "/expenses",
+    icon: ReceiptText,
+  },
+  {
+    title: "Profits",
+    subtitle: "အမြတ်အစွန်း",
+    href: "/profits",
+    icon: WalletCards,
+  },
+  {
+    title: "Invoices",
+    subtitle: "ဘောင်ချာစရင်းများ",
+    href: "/invoices",
+    icon: FileText,
+  },
+];
+
+export default function Sidebar() {
+  const pathname = usePathname();
+
+  return (
+    <>
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 px-4 py-3 shadow-card backdrop-blur lg:hidden">
+        <Link href="/" className="mb-3 flex items-center gap-3">
+          <span className="flex size-9 items-center justify-center rounded-lg bg-pink-100 text-pink-700">
+            <Home className="size-5" />
+          </span>
+          <span className="font-chewy text-2xl">Tiny Gong</span>
+        </Link>
+
+        <nav className="flex gap-2 overflow-x-auto pb-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-label={item.title}
+                className={cn(
+                  "flex size-10 shrink-0 items-center justify-center rounded-lg transition",
+                  "hover:bg-highlight/10 hover:text-hightlight",
+                  isActive && "bg-highlight/15 text-hightlight shadow-card",
+                )}
+              >
+                <Icon className="size-5" />
+              </Link>
+            );
+          })}
+        </nav>
+      </header>
+
+      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 bg-white/90 px-4 py-6  backdrop-blur lg:flex lg:flex-col">
+        <Link
+          href="/"
+          className="mb-8 flex justify-center items-center rounded-lg transition bg-gray-50"
+        >
+          <BrandLogo className="size-30" />
+        </Link>
+
+        <nav className="flex flex-1 flex-col gap-2">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "group relative flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 transition ease-in",
+                  "hover:bg-pink-50 hover:text-pink-700 hover:scale-105",
+                  isActive && "bg-card-surface text-foreground shadow-card",
+                )}
+              >
+                {isActive && (
+                  <TwoSparklesIcon className="absolute top-0 right-0 h-6 w-6 text-highlight-soft  group-hover:text-pink-700" />
+                )}
+                <Icon className="size-5 shrink-0" />
+                <span className="flex min-w-0 flex-col leading-tight">
+                  <span className="truncate">{item.title}</span>
+                  <span className="truncate font-umoe text-xs font-normal opacity-75">
+                    ({item.subtitle})
+                  </span>
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
+    </>
+  );
+}

@@ -1,0 +1,72 @@
+@layer utilities {
+  .animate-modal-overlay-in {
+    animation: modal-overlay-in 180ms ease-out both;
+  }
+
+  .animate-modal-overlay-out {
+    animation: modal-overlay-out 160ms ease-in both;
+  }
+
+  .animate-modal-content-in {
+    animation: modal-content-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .animate-modal-content-out {
+    animation: modal-content-out 160ms ease-in both;
+  }
+
+  .animate-tab-panel {
+    animation: tab-panel-in 180ms ease-out both;
+  }
+}
+
+@keyframes modal-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modal-content-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes tab-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

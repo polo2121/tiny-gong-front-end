@@ -1,0 +1,130 @@
+:root {
+  /* ==========================
+     Primitive Colors
+     ========================== */
+
+  /* Gray */
+  --gray-50: #F5F7F9;
+  --gray-100: #ECEFF3;
+  --gray-200: #B5BDC5;
+  --gray-300: #7B8794;
+  --gray-400: #66717D;
+  --gray-500: #4F5B67;
+  --gray-600: #2F3A45;
+  --gray-700: #1F2933;
+  --gray-800: #0F1720;
+  --gray-900: #0A0F14;
+
+
+  /* Orange */
+  --orange-50: ##FFFBF7;
+  --orange-100: #FFF8F2;
+  --orange-200: #FEF5EC;
+  --orange-300: #FDEAD6 ;
+  --orange-400: #FCD6B0;
+  --orange-500: #F9B96E;
+  --orange-600: #F59E0B;
+  --orange-700: #D97706;
+  --orange-800: #B45309;
+  --orange-900: #78350F; 
+
+  /* Blue */
+  --blue-50: #EEF6FF;
+  --blue-100: #D9ECFF;
+  --blue-200: #B8DAFF;
+  --blue-300: #8CC2FF;
+  --blue-400: #5EA6FF;
+  --blue-500: #3B82F6;
+  --blue-600: #2563EB;
+  --blue-700: #1D4ED8;
+  --blue-800: #1E40AF;
+  --blue-900: #1E3A8A;
+  /* Green */
+  --green-50: #ECFDF3;
+  --green-100: #D5FBE4;
+  --green-200: #ACF7CA;
+  --green-300: #87F3B2;
+  --green-400: #5DEF97;
+  --green-500: #33EB7D;
+  --green-600: #16DB65;
+  --green-700: #10A24B;
+  --green-800: #0B6F33;
+  --green-900: #06381A;
+
+  /* Yellow */
+  --yellow-50: #FFF9EB;
+  --yellow-100: #FFF1D2;
+  --yellow-200: #FFE3A3;
+  --yellow-300: #FFD16B;
+  --yellow-400: #FFBC2D;
+  --yellow-500: #F59E0B;
+  --yellow-600: #C27D08;
+  --yellow-700: #946006;
+  --yellow-800: #694304;
+  --yellow-900: #402702;
+
+  /* Red */
+  --red-50: #FCEDED;
+  --red-100: #F9DCDC;
+  --red-200: #F5BBBB;
+  --red-300: #F19595;
+  --red-400: #EE696A;
+  --red-500: #E5383B;
+  --red-600: #B62B2D;
+  --red-700: #8C1E20;
+  --red-800: #641314;
+  --red-900: #3C0708;
+
+  /* Purple */
+  --purple-50: #f1eefb;
+  --purple-100: #F5F1FF;
+  --purple-200: #EFE8FF;
+  --purple-300: #E4D8FF;
+  --purple-400: #D1BCFF;
+  --purple-500: #B794F6;
+  --purple-600: #9F7AEA;
+  --purple-700: #805AD5;
+  --purple-800: #6B46C1;
+  --purple-900: #553C9A;
+
+  /* Pink (Accent) */
+
+  --pink-50: #FCE7F3;
+  --pink-100: #FBCFE8;
+  --pink-200: #F9A8D4;
+  --pink-300: #F472B6;
+  --pink-400: #F94194;
+  --pink-500: #E11D48;
+  --pink-600: #C2185B;
+  --pink-700: #9C27B0;
+  --pink-800: #7B1FA2;
+  --pink-900: #4A148C;
+
+  /* Teal (Brand) */
+  --teal-50: oklch(96.976% 0.01383 202.885);
+  --teal-100: oklch(0.944 0.061 203.82);
+  --teal-200: oklch(0.895 0.113 204.48);
+  --teal-300: oklch(0.862 0.139 206.42);
+  --teal-400: oklch(0.796 0.137 208.59);
+  --teal-500: oklch(0.619 0.106 207.95);
+  --teal-600: oklch(0.524 0.09 207.96);
+  --teal-700: oklch(0.434 0.075 207.61);
+  --teal-800: oklch(0.325 0.056 205.84);
+  --teal-900: oklch(0.222 0.038 206.62);
+  --teal-950: oklch(0.149 0.025 199.66);
+
+  /* Pink (Accent) */
+  --pink-50: oklch(0.96 0.018 356.54);
+  --pink-100: oklch(0.909 0.046 355.5);
+  --pink-200: oklch(0.821 0.091 358.22);
+  --pink-300: oklch(0.74 0.142 0.11);
+  --pink-400: oklch(0.674 0.185 3.25);
+  --pink-500: oklch(0.614 0.223 8.53);
+  --pink-600: oklch(0.536 0.205 11.16);
+  --pink-700: oklch(0.432 0.164 10.23);
+  --pink-800: oklch(0.334 0.123 9.69);
+  --pink-900: oklch(0.215 0.074 6.11);
+  --pink-950: oklch(0.141 0.046 358.48);
+
+
+}
