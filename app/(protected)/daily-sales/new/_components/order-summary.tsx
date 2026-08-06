@@ -1,3 +1,5 @@
+"use client";
+
 import type { ComponentType, SVGProps } from "react";
 
 import DualText from "@/components/DualText";
@@ -9,12 +11,10 @@ import { ThreeSparklesIcon } from "@/components/icons/ThreeSparklesIcon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-type OrderSummaryProps = {
-  totals: {
-    totalQty: string;
-    grandTotal: string;
-  };
-};
+import {
+  getSaleTotals,
+  useSaleDraftStore,
+} from "../_stores/use-sale-draft-store";
 
 type OrderSummaryRow = {
   label: string;
@@ -23,31 +23,19 @@ type OrderSummaryRow = {
   isEmphasized?: boolean;
 };
 
-const summaryRows: OrderSummaryRow[] = [
+const summaryRowIcons: Record<string, ComponentType<SVGProps<SVGSVGElement>>> =
   {
-    label: "Items",
-    value: "6",
-    icon: ShoppingBasketIcon,
-    isEmphasized: true,
-  },
-  {
-    label: "Subtotal",
-    value: "56,500",
-    icon: SubTotalIcon,
-  },
-  {
-    label: "Discount",
-    value: "1,500",
-    icon: DiscountIcon,
-  },
-  {
-    label: "Tax / Fees",
-    value: "0",
-    icon: TaxIcon,
-  },
-];
+    Items: ShoppingBasketIcon,
+    Subtotal: SubTotalIcon,
+    Discount: DiscountIcon,
+    "Tax / Fees": TaxIcon,
+  };
 
-export function OrderSummary({ totals }: OrderSummaryProps) {
+export function OrderSummary() {
+  const items = useSaleDraftStore((state) => state.items);
+  const totals = getSaleTotals(items);
+  const summaryRows = getOrderSummaryRows(totals);
+
   return (
     <Card className="bg-card-surface p-0">
       <CardHeader className="px-4 pt-6">
@@ -98,4 +86,32 @@ export function OrderSummary({ totals }: OrderSummaryProps) {
       </CardContent>
     </Card>
   );
+}
+
+function getOrderSummaryRows(
+  totals: ReturnType<typeof getSaleTotals>,
+): OrderSummaryRow[] {
+  return [
+    {
+      label: "Items",
+      value: totals.totalQty,
+      icon: summaryRowIcons.Items,
+      isEmphasized: true,
+    },
+    {
+      label: "Subtotal",
+      value: totals.subtotal,
+      icon: summaryRowIcons.Subtotal,
+    },
+    {
+      label: "Discount",
+      value: totals.discount,
+      icon: summaryRowIcons.Discount,
+    },
+    {
+      label: "Tax / Fees",
+      value: totals.taxFees,
+      icon: summaryRowIcons["Tax / Fees"],
+    },
+  ];
 }

@@ -1,23 +1,19 @@
+import type { ExistingCustomer } from "./_components/customer/types";
+
 export type CartItem = {
   name: string;
   sku: string;
   category: ProductCategory;
   variant?: ProductVariant;
   qty: number;
-  price: string;
-  discount: string;
-  total: string;
-};
-
-export type Customer = {
-  id?: string;
-  name: string;
-  phone: string;
+  price: number;
+  discount: number;
+  total: number;
 };
 
 export type SummaryRow = {
   label: string;
-  value: string;
+  value: number;
 };
 
 export type ProductSearchResult = {
@@ -27,7 +23,7 @@ export type ProductSearchResult = {
   barcode: string;
   category: ProductCategory;
   variants?: ProductVariant[];
-  price: string;
+  price: number;
   stock: number;
 };
 
@@ -54,9 +50,9 @@ export const cartItems: CartItem[] = [
       color: "Sky Blue",
     },
     qty: 2,
-    price: "12,000",
-    discount: "1,000",
-    total: "23,000",
+    price: 12000,
+    discount: 1000,
+    total: 23000,
   },
   {
     name: "Animal Alphabet Book",
@@ -67,9 +63,9 @@ export const cartItems: CartItem[] = [
       ageRange: "2-5",
     },
     qty: 3,
-    price: "6,500",
-    discount: "500",
-    total: "19,000",
+    price: 6500,
+    discount: 500,
+    total: 19000,
   },
   {
     name: "Wooden Shape Puzzle",
@@ -81,43 +77,46 @@ export const cartItems: CartItem[] = [
       material: "Wooden",
     },
     qty: 1,
-    price: "13,000",
-    discount: "0",
-    total: "13,000",
+    price: 13000,
+    discount: 0,
+    total: 13000,
   },
 ];
 
 export const summaryRows: SummaryRow[] = [
-  { label: "Items", value: "6" },
-  { label: "Subtotal", value: "56,500" },
-  { label: "Discount", value: "1,500" },
-  { label: "Tax / Fees", value: "0" },
+  { label: "Items", value: 6 },
+  { label: "Subtotal", value: 56500 },
+  { label: "Discount", value: 1500 },
+  { label: "Tax / Fees", value: 0 },
 ];
 
 export const paymentMethods = ["Cash", "KPay", "Bank", "Credit"];
 
 export const orderTotals = {
-  totalQty: "6",
-  grandTotal: "55,000",
-  paidAmount: "60,000",
-  change: "5,000 MMK",
+  totalQty: 6,
+  grandTotal: 55000,
+  paidAmount: 60000,
+  change: 5000,
 };
 
-export const mockCustomers: Customer[] = [
+export const mockCustomers: ExistingCustomer[] = [
   {
     id: "customer_001",
     name: "May Thu",
     phone: "09 420 123 456",
+    deliveryAddress: "No. 12, Yuzana Street, Sanchaung",
   },
   {
     id: "customer_002",
     name: "Aung Pyae",
     phone: "09 777 456 123",
+    deliveryAddress: "Building 4B, Hledan Road, Kamayut",
   },
   {
     id: "customer_003",
     name: "Nandar Hlaing",
     phone: "09 250 888 331",
+    deliveryAddress: "No. 88, Garden Street, Bahan",
   },
 ];
 
@@ -133,7 +132,7 @@ export const mockProducts: ProductSearchResult[] = [
       { label: "Size 4Y / Sky Blue", size: "4Y", color: "Sky Blue" },
       { label: "Size 5Y / Lemon", size: "5Y", color: "Lemon" },
     ],
-    price: "12,000",
+    price: 12000,
     stock: 24,
   },
   {
@@ -143,7 +142,7 @@ export const mockProducts: ProductSearchResult[] = [
     barcode: "8855204801",
     category: "Books",
     variants: [{ label: "Board Book / Ages 2-5", ageRange: "2-5" }],
-    price: "6,500",
+    price: 6500,
     stock: 42,
   },
   {
@@ -159,7 +158,7 @@ export const mockProducts: ProductSearchResult[] = [
         material: "Wooden",
       },
     ],
-    price: "13,000",
+    price: 13000,
     stock: 18,
   },
   {
@@ -172,7 +171,7 @@ export const mockProducts: ProductSearchResult[] = [
       { label: "0-6M / Rainbow", size: "0-6M", color: "Rainbow" },
       { label: "6-12M / Rainbow", size: "6-12M", color: "Rainbow" },
     ],
-    price: "3,500",
+    price: 3500,
     stock: 36,
   },
   {
@@ -193,7 +192,7 @@ export const mockProducts: ProductSearchResult[] = [
         color: "Blush",
       },
     ],
-    price: "9,000",
+    price: 9000,
     stock: 15,
   },
   {
@@ -203,7 +202,97 @@ export const mockProducts: ProductSearchResult[] = [
     barcode: "8855620801",
     category: "Books",
     variants: [{ label: "Hardcover Set / Ages 4-8", ageRange: "4-8" }],
-    price: "15,500",
+    price: 15500,
     stock: 12,
   },
 ];
+
+
+export const PAYMENT_METHODS = [{
+  cash: [
+    {
+      value: "cash",
+      label: "Cash",
+      imgUrl: null,
+    },
+  ],
+
+  mobileBanking: [
+    {
+      value: "kpay",
+      label: "KBZ Pay",
+      imgUrl: null,
+    },
+
+    {
+      value: "aya-pay",
+      label: "AYA Pay",
+      imgUrl: null,
+    },
+
+    {
+      value: "cb-pay",
+      label: "CB Pay",
+      imgUrl: null,
+    },
+
+    {
+      value: "wave-pay",
+      label: "Wave Pay",
+      imgUrl: null,
+    },
+
+    {
+      value: "uab-pay",
+      label: "UAB Pay",
+      imgUrl: null,
+    },
+
+    {
+      value: "ok-dollar",
+      label: "OK Dollar",
+      imgUrl: null,
+    },
+  ],
+
+  banking: [
+    {
+      value: "kbz-bank",
+      label: "KBZ Bank",
+      imgUrl: null,
+    },
+
+    {
+      value: "aya-bank",
+      label: "AYA Bank",
+      imgUrl: null,
+    },
+
+    {
+      value: "cb-bank",
+      label: "CB Bank",
+      imgUrl: null,
+    },
+
+    {
+      value: "uab-bank",
+      label: "UAB Bank",
+      imgUrl: null,
+    },
+
+    {
+      value: "yoma-bank",
+      label: "Yoma Bank",
+      imgUrl: null,
+    },
+
+    {
+      value: "agd-bank",
+      label: "AGD Bank",
+      imgUrl: null,
+    },
+  ],
+}] as const;
+
+
+export type PaymentMethod = keyof typeof PAYMENT_METHODS;

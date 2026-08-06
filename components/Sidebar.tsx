@@ -91,12 +91,13 @@ export default function Sidebar() {
         </nav>
       </header>
 
-      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 bg-white/90 px-4 py-6  backdrop-blur lg:flex lg:flex-col">
+      <aside className="sticky top-0 hidden h-screen w-18 shrink-0 bg-white/90 px-3 py-6 backdrop-blur transition-[width] duration-200 ease-out lg:flex lg:flex-col 2xl:w-50 2xl:px-4">
         <Link
           href="/"
           className="mb-8 flex justify-center items-center rounded-lg transition bg-gray-50"
+          aria-label="Tiny Gong home"
         >
-          <BrandLogo className="size-30" />
+          <BrandLogo className="size-12 2xl:size-30" />
         </Link>
 
         <nav className="flex flex-1 flex-col gap-2">
@@ -109,8 +110,10 @@ export default function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
+                title={item.title}
+                aria-label={item.title}
                 className={cn(
-                  "group relative flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 transition ease-in",
+                  "group relative flex items-center justify-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 transition ease-in 2xl:justify-start",
                   "hover:bg-pink-50 hover:text-pink-700 hover:scale-105",
                   isActive && "bg-card-surface text-foreground shadow-card",
                 )}
@@ -119,7 +122,7 @@ export default function Sidebar() {
                   <TwoSparklesIcon className="absolute top-0 right-0 h-6 w-6 text-highlight-soft  group-hover:text-pink-700" />
                 )}
                 <Icon className="size-5 shrink-0" />
-                <span className="flex min-w-0 flex-col leading-tight">
+                <span className="hidden min-w-0 flex-col leading-tight 2xl:flex">
                   <span className="truncate">{item.title}</span>
                   <span className="truncate font-umoe text-xs font-normal opacity-75">
                     ({item.subtitle})

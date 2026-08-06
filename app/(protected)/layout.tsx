@@ -10,7 +10,7 @@ export default function ProtectedLayout({
     <div className="min-h-screen ">
       <div className="flex min-h-screen flex-col lg:flex-row">
         <Sidebar />
-        <main className="min-w-0 flex-1 py-6 px-4">
+        <main className="min-w-0 flex-1 px-4 py-6 lg:px-6">
           <Breadcrumbs />
           {children}
         </main>

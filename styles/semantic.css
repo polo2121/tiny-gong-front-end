@@ -3,9 +3,15 @@
   --surface: #F3F9F9;
   --surface-raised: white;
   --surface-muted: var(--gray-100);
+  --card: var(--surface-raised);
+  --card-foreground: var(--foreground);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--foreground-muted);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--foreground);
 
   --foreground: var(--teal-900);
-  --foreground-muted: var(--gray-600);
+  --foreground-muted: var(--gray-300);
   --foreground-subtle: var(--gray-500);
   --foreground-inverse: var(--gray-50);
 
@@ -27,6 +33,10 @@
   --accent-hover: var(--pink-700);
   --accent-foreground: white;
 
+  --danger: var(--pink-700);
+  --danger-soft: var(--pink-100);
+  --danger-foreground: var(--pink-700);
+
   --border: var(--gray-300);
   --input: var(--gray-300);
   --ring: var(--highlight);
@@ -35,7 +45,7 @@
   --success-foreground: white;
   --warning: var(--yellow-600);
   --warning-foreground: var(--gray-900);
-  --destructive: var(--red-700);
+  --destructive: var(--red-500);
   --destructive-hover: var(--red-800);
   --destructive-active: var(--red-900);
   --destructive-foreground: white;
@@ -51,6 +61,12 @@
   --surface: var(--gray-800);
   --surface-raised: var(--gray-700);
   --surface-muted: var(--gray-800);
+  --card: var(--surface-raised);
+  --card-foreground: var(--foreground);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--foreground-muted);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--foreground);
 
   --foreground: var(--gray-50);
   --foreground-muted: var(--gray-300);
@@ -73,6 +89,10 @@
   --accent: var(--pink-400);
   --accent-hover: var(--pink-300);
   --accent-foreground: var(--gray-900);
+
+  --danger: var(--pink-300);
+  --danger-soft: color-mix(in oklch, var(--pink-400) 18%, transparent);
+  --danger-foreground: var(--pink-100);
 
   --border: color-mix(in oklch, var(--gray-600) 70%, transparent);
   --input: var(--gray-600);

@@ -5,7 +5,6 @@ export default function ExpensesPage() {
     <ProtectedPageTitle
       title="Expenses"
       subtitle="အသုံးစရိတ်"
-      accentClassName="text-pink-700"
     />
   );
 }

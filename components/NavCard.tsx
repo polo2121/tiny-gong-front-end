@@ -1,11 +1,8 @@
 import Link from "next/link";
 import * as React from "react";
-import {
-  Card,
-  CardHeader,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import type { LucideIcon } from "lucide-react";
+
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import DualText from "./DualText";
 import { TwoSparklesIcon } from "@/components/icons/TwoSparklesIcon";
@@ -17,6 +14,7 @@ export interface NavCardProps {
   subtitle: string;
   className?: string;
   iconColor: string;
+  icon: LucideIcon;
   onClick?: () => void;
 }
 
@@ -27,6 +25,7 @@ export default function NavCard({
   subtitle,
   className,
   iconColor,
+  icon: Icon,
 }: NavCardProps) {
   return (
     <Link
@@ -40,11 +39,14 @@ export default function NavCard({
         )}
       >
         <div className="relative z-10 flex flex-col gap-4 py-4">
-          <CardHeader className="flex items-start gap-3">
+          <CardHeader className="flex flex-row items-start justify-between gap-3">
             <div className={cn("flex flex-col", className)}>
               <span className="font-umoe text-sm md:text-sm">({subtitle})</span>
               <span className="font-chewy text-base md:text-2xl">{title}</span>
             </div>
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/70 shadow-sm">
+              <Icon className={cn("size-5", iconColor)} />
+            </span>
           </CardHeader>
 
           <CardContent className="font-medium line-clamp-2 text-foreground">

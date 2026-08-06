@@ -5,7 +5,6 @@ export default function InventoryPage() {
     <ProtectedPageTitle
       title="Inventory"
       subtitle="ပစ္စည်း စီမံခန့်ခွဲ"
-      accentClassName="text-purple-700"
     />
   );
 }

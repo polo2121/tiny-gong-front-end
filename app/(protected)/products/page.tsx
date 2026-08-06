@@ -5,7 +5,6 @@ export default function ProductsPage() {
     <ProtectedPageTitle
       title="Products"
       subtitle="ပစ္စည်းလက်ကျန်"
-      accentClassName="text-hightlight"
     />
   );
 }

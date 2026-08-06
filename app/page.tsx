@@ -1,4 +1,13 @@
-import { BookOpen, Puzzle, Shirt, Sparkles } from "lucide-react";
+import {
+  Boxes,
+  ChartNoAxesCombined,
+  FileText,
+  Package,
+  ReceiptText,
+  ShoppingBag,
+  Truck,
+  Users,
+} from "lucide-react";
 
 import NavCard from "@/components/NavCard";
 import { PlayfulCollectionsIcon } from "@/components/icons/PlayfulCollectionsIcon";
@@ -13,8 +22,9 @@ const items = [
     description:
       "Track daily selling activity, follow performance, and keep each transaction moving smoothly.",
     href: "/daily-sales",
-    styles: "bg-yellow-50 text-yellow-700 hover:border-yellow-600",
+    styles: "bg-yellow-50 text-yellow-600 hover:border-yellow-600",
     iconColor: "text-yellow-600",
+    icon: ReceiptText,
   },
   {
     title: "Inventory",
@@ -22,8 +32,9 @@ const items = [
     description:
       "Manage product details, organize variants, and keep your catalog clean and accurate.",
     href: "/inventory",
-    styles: "bg-purple-50 text-purple-700 hover:border-purple-700",
-    iconColor: "text-purple-700",
+    styles: "bg-teal-50 text-teal-600 hover:border-teal-700",
+    iconColor: "text-teal-600",
+    icon: Boxes,
   },
   {
     title: "Products",
@@ -31,8 +42,29 @@ const items = [
     description:
       "Monitor products' levels, spot low items early, and keep essentials ready for sale.",
     href: "/products",
-    styles: "bg-teal-50 text-teal-700 hover:border-hightlight",
-    iconColor: "text-hightlight",
+    styles: "bg-teal-50 text-teal-600 hover:border-hightlight",
+    iconColor: "text-teal-600",
+    icon: Package,
+  },
+  {
+    title: "Purchase",
+    subtitle: "ဝယ်ယူမှုစာရင်း",
+    description:
+      "Record incoming stock, track supplier purchases, and keep buying history organized.",
+    href: "/purchase",
+    styles: "bg-yellow-50 text-yellow-600 hover:border-yellow-600",
+    iconColor: "text-yellow-600",
+    icon: Truck,
+  },
+  {
+    title: "Customers",
+    subtitle: "ဖောက်သည်စာရင်း",
+    description:
+      "Manage customer details, delivery addresses, and purchase relationships in one place.",
+    href: "/customers",
+    styles: "bg-pink-50 text-pink-600 hover:border-pink-700",
+    iconColor: "text-pink-600",
+    icon: Users,
   },
   {
     title: "Expenses",
@@ -40,16 +72,18 @@ const items = [
     description:
       "Track expenses clearly, organize spending records, and keep business costs under control.",
     href: "/expenses",
-    styles: "bg-pink-50 text-pink-700 hover:border-pink-700",
-    iconColor: "text-pink-700",
+    styles: "bg-rose-50 text-rose-600 hover:border-rose-700",
+    iconColor: "text-rose-600",
+    icon: ShoppingBag,
   },
   {
     title: "Profits",
     subtitle: "အမြတ်အစွန်း",
     description: "View your profits and financial performance",
     href: "/profits",
-    styles: "bg-green-50 text-green-700 hover:border-green-700",
-    iconColor: "text-green-700",
+    styles: "bg-green-50 text-green-600 hover:border-green-700",
+    iconColor: "text-green-600",
+    icon: ChartNoAxesCombined,
   },
   {
     title: "Invoices",
@@ -57,26 +91,9 @@ const items = [
     description:
       "Create and manage invoices, track payment status, and send billing details to customers.",
     href: "/invoices",
-    styles: "bg-blue-50 text-blue-700 hover:border-blue-700",
-    iconColor: "text-blue-700",
-  },
-];
-
-const logoStickers = [
-  {
-    label: "Clothes",
-    className: "bg-pink-50 text-pink-700 rotate-[-4deg]",
-    icon: Shirt,
-  },
-  {
-    label: "Books",
-    className: "bg-yellow-50 text-yellow-700 rotate-[3deg]",
-    icon: BookOpen,
-  },
-  {
-    label: "Toys",
-    className: "bg-highlight/10 text-hightlight rotate-[-2deg]",
-    icon: Puzzle,
+    styles: "bg-blue-50 text-blue-600 hover:border-blue-700",
+    iconColor: "text-blue-600",
+    icon: FileText,
   },
 ];
 
@@ -158,6 +175,7 @@ export default function Home() {
                 description={item.description}
                 className={item.styles}
                 iconColor={item.iconColor}
+                icon={item.icon}
               />
             ))}
           </div>

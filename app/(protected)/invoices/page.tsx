@@ -5,7 +5,6 @@ export default function InvoicesPage() {
     <ProtectedPageTitle
       title="Invoices"
       subtitle="ဘောင်ချာစရင်းများ"
-      accentClassName="text-blue-700"
     />
   );
 }

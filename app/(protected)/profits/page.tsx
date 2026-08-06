@@ -5,7 +5,6 @@ export default function ProfitsPage() {
     <ProtectedPageTitle
       title="Profits"
       subtitle="အမြတ်အစွန်း"
-      accentClassName="text-green-700"
     />
   );
 }
