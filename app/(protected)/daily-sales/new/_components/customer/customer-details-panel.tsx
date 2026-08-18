@@ -67,7 +67,9 @@ export function CustomerDetailsPanel() {
             </div>
           </dl>
         ) : (
-          <p className="text-sm font-semibold opacity-60">No customer selected.</p>
+          <p className="text-sm font-semibold opacity-60">
+            No customer selected.
+          </p>
         )}
       </DraftPreviewCard>
 

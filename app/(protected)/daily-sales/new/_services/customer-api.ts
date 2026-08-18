@@ -1,21 +1,21 @@
-import { mockCustomers } from "../_data";
+import { sampleCustomers } from "../_data";
 import type {
   SearchCustomersOptions,
   SearchCustomersResponse,
 } from "../_components/customer/types";
 
-const mockCustomerSearchDelayMs = 350;
+const customerSearchDelayMs = 350;
 
 export async function searchCustomers({
   query,
   signal,
 }: SearchCustomersOptions): Promise<SearchCustomersResponse> {
-  // TODO: Replace this mock implementation with the real customer search API.
+  // TODO: Replace this temporary implementation with the real customer search API.
   // Example: GET /api/customers?search=${encodeURIComponent(query)}
-  await wait(mockCustomerSearchDelayMs, signal);
+  await wait(customerSearchDelayMs, signal);
 
   const normalizedQuery = query.trim().toLowerCase();
-  const customers = mockCustomers.filter((customer) =>
+  const customers = sampleCustomers.filter((customer) =>
     [customer.name, customer.phone, customer.deliveryAddress].some((value) =>
       value.toLowerCase().includes(normalizedQuery),
     ),

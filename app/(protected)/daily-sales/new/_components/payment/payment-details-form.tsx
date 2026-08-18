@@ -1,35 +1,25 @@
 "use client";
 
 import { useState } from "react";
-
 import DualText from "@/components/DualText";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { FieldError } from "@/components/ui/field";
-import { RadioGroup } from "@/components/ui/radio-group";
 
 import { paymentProviders } from "./constants";
 import { PaymentRadioItem } from "./payment-radio-item";
-import type { PaymentDraft } from "./schema";
-import { paymentDraftSchema } from "./schema";
+import { paymentDraftSchema, type PaymentDraft } from "./schema";
+import type {
+  PaymentFormState,
+  PaymentMethod,
+  PaymentProvider,
+  PaymentStatus,
+} from "./types";
 
-export const defaultPaymentDraft: PaymentDraft = {
+const defaultPaymentForm: PaymentFormState = {
   status: "paid",
   method: "wallet",
   provider: "k-pay",
-};
-
-type PaymentStatus = "paid" | "unpaid";
-type PaymentMethod = "cash" | "wallet" | "bank";
-type PaymentProvider =
-  | (typeof paymentProviders.wallet)[number]["value"]
-  | (typeof paymentProviders.bank)[number]["value"]
-  | null;
-
-type PaymentFormState = {
-  status: PaymentStatus;
-  method: PaymentMethod;
-  provider: PaymentProvider;
 };
 
 interface PaymentDetailsFormProps {
@@ -43,52 +33,24 @@ export function PaymentDetailsForm({
   onCancel,
   onSave,
 }: PaymentDetailsFormProps) {
-  const initialDraft = initialPaymentDraft ?? defaultPaymentDraft;
-  const [paymentForm, setPaymentForm] = useState<PaymentFormState>({
-    status: initialDraft.status,
-    method: initialDraft.method,
-    provider: initialDraft.provider,
-  });
+  const [payment, setPayment] = useState<PaymentFormState>(
+    initialPaymentDraft ?? defaultPaymentForm,
+  );
+
   const [error, setError] = useState("");
 
-  const handleStatusChanged = (status: PaymentStatus) => {
+  const patchPayment = (patch: Partial<PaymentFormState>) => {
     setError("");
 
-    if (status === "unpaid") {
-      return setPaymentForm({
-        ...paymentForm,
-        status,
-        method: "cash",
-        provider: null,
-      });
-    }
-    return setPaymentForm({
-      ...paymentForm,
-      status,
-    });
+    setPayment((prev) => ({
+      ...prev,
+      ...patch,
+    }));
   };
 
-  const handleMethodChanged = (method: PaymentMethod) => {
-    setError("");
+  const savePayment = () => {
+    const result = paymentDraftSchema.safeParse(payment);
 
-    if (method === "cash") {
-      return setPaymentForm({
-        ...paymentForm,
-        method,
-        provider: null,
-      });
-    }
-    return setPaymentForm({
-      ...paymentForm,
-      method,
-      provider: method === "bank" ? "aya-bank" : "k-pay",
-    });
-  };
-
-  const savePaymentDraft = () => {
-    setError("");
-
-    const result = paymentDraftSchema.safeParse(paymentForm);
     if (!result.success) {
       setError(result.error.issues[0]?.message ?? "Check payment details.");
       return;
@@ -99,127 +61,150 @@ export function PaymentDetailsForm({
 
   return (
     <>
-      <form className="mt-6 flex flex-1 flex-col gap-6">
-        <div>
-          <p>status: {paymentForm.status}</p>
-          <p>method: {paymentForm.method}</p>
-          <p>provider: {paymentForm.provider}</p>
-        </div>
-        <section className="grid gap-8 lg:grid-cols-[180px_1fr]">
+      <form className="mt-6 grid gap-8">
+        <div className="grid grid-cols-[180px_1fr]">
           <DualText
             label="Payment Status"
             subLabel="ငွေပေးချေမှုအခြေအနေ"
             size="sm"
           />
 
-          <RadioGroup
-            className="flex flex-wrap gap-3"
-            value={paymentForm.status}
-            onValueChange={(value) => {
-              handleStatusChanged(value as PaymentStatus);
-            }}
-          >
+          <div className="grid grid-cols-3 gap-4">
             <PaymentRadioItem
+              name="payment-status"
               value="paid"
-              label="Paid"
+              checked={payment.status === "paid"}
               logoSrc="/images/paid.svg"
-              isSelected={paymentForm.status === "paid"}
-            />
+              onChange={() =>
+                patchPayment({
+                  status: "paid",
+                  method: "wallet",
+                  provider: "k-pay",
+                })
+              }
+            >
+              Paid
+            </PaymentRadioItem>
+
             <PaymentRadioItem
+              name="payment-status"
               value="unpaid"
-              label="Unpaid"
+              checked={payment.status === "unpaid"}
               logoSrc="/images/not-paid.svg"
-              isSelected={paymentForm.status === "unpaid"}
-            />
-          </RadioGroup>
-        </section>
+              onChange={() =>
+                patchPayment({
+                  status: "unpaid",
+                  method: null,
+                  provider: null,
+                })
+              }
+            >
+              Unpaid
+            </PaymentRadioItem>
+          </div>
+        </div>
 
-        <section className="grid gap-8 lg:grid-cols-[180px_1fr]">
-          <DualText
-            label="Payment Method"
-            subLabel="ငွေပေးချေနိုင်သော နည်းလမ်းများ"
-            size="sm"
-          />
-
-          <RadioGroup
-            className="flex flex-wrap gap-3"
-            value={paymentForm.method}
-            onValueChange={(value) => {
-              handleMethodChanged(value as PaymentMethod);
-            }}
-          >
-            <PaymentRadioItem
-              value="wallet"
-              label="Wallet"
-              logoSrc="/images/mobile-wallet.svg"
-              isSelected={paymentForm.method === "wallet"}
-              disabled={paymentForm.status === "unpaid"}
-            />
-            <PaymentRadioItem
-              value="bank"
-              label="Banking"
-              logoSrc="/images/bank.svg"
-              isSelected={paymentForm.method === "bank"}
-              disabled={paymentForm.status === "unpaid"}
-            />
-            <PaymentRadioItem
-              value="cash"
-              label="Cash"
-              logoSrc="/images/cash.svg"
-              isSelected={paymentForm.method === "cash"}
-              disabled={paymentForm.status === "unpaid"}
-            />
-          </RadioGroup>
-        </section>
-
-        {paymentForm.method !== "cash" && (
-          <section className="grid gap-8 lg:grid-cols-[180px_1fr]">
+        {payment.status === "paid" && (
+          <div className="grid grid-cols-[180px_1fr]">
             <DualText
-              label="Payment Provider"
-              subLabel="ငွေပေးချေနိုင်သော နည်းလမ်းများ"
+              label="Payment Method"
+              subLabel="ငွေပေးချေမှုနည်းလမ်း"
               size="sm"
             />
 
-            <RadioGroup
-              value={paymentForm.provider ?? ""}
-              onValueChange={(value) => {
-                setError("");
-                setPaymentForm({
-                  ...paymentForm,
-                  provider: value as PaymentProvider,
-                });
-              }}
-              className="flex flex-wrap gap-3"
-              disabled={paymentForm.status === "unpaid"}
-            >
-              {paymentProviders[paymentForm.method].map((paymentProvider) => (
-                <PaymentRadioItem
-                  key={paymentProvider.value}
-                  value={paymentProvider.value}
-                  label={paymentProvider.label}
-                  logoSrc={paymentProvider.logoSrc ?? undefined}
-                  isSelected={paymentProvider.value === paymentForm.provider}
-                  disabled={paymentForm.status === "unpaid"}
-                />
-              ))}
-            </RadioGroup>
-          </section>
+            <div className="grid grid-cols-3 gap-4">
+              <PaymentRadioItem
+                name="payment-method"
+                value="wallet"
+                checked={payment.method === "wallet"}
+                logoSrc="/images/mobile-wallet.svg"
+                onChange={() =>
+                  patchPayment({
+                    method: "wallet",
+                    provider: "k-pay",
+                  })
+                }
+              >
+                Wallet
+              </PaymentRadioItem>
+
+              <PaymentRadioItem
+                name="payment-method"
+                value="bank"
+                checked={payment.method === "bank"}
+                logoSrc="/images/bank.svg"
+                onChange={() =>
+                  patchPayment({
+                    method: "bank",
+                    provider: "aya-bank",
+                  })
+                }
+              >
+                Bank
+              </PaymentRadioItem>
+
+              <PaymentRadioItem
+                name="payment-method"
+                value="cash"
+                checked={payment.method === "cash"}
+                logoSrc="/images/cash.svg"
+                onChange={() =>
+                  patchPayment({
+                    method: "cash",
+                    provider: null,
+                  })
+                }
+              >
+                Cash
+              </PaymentRadioItem>
+            </div>
+          </div>
         )}
+
+        {payment.status === "paid" &&
+          payment.method !== null &&
+          payment.method !== "cash" && (
+            <div className="grid grid-cols-[180px_1fr]">
+              <DualText
+                label="Payment Provider"
+                subLabel="ငွေပေးချေမှုဝန်ဆောင်မှု"
+                size="sm"
+              />
+
+              <div className="grid grid-cols-3 gap-4">
+                {paymentProviders[payment.method].map((provider) => (
+                  <PaymentRadioItem
+                    key={provider.value}
+                    name="payment-provider"
+                    value={provider.value}
+                    checked={payment.provider === provider.value}
+                    logoSrc={provider.logoSrc}
+                    onChange={() =>
+                      patchPayment({
+                        provider: provider.value as PaymentProvider,
+                      })
+                    }
+                  >
+                    {provider.label}
+                  </PaymentRadioItem>
+                ))}
+              </div>
+            </div>
+          )}
+
+        {error && <FieldError>{error}</FieldError>}
       </form>
 
-      {error && <FieldError>{error}</FieldError>}
-
-      <DialogFooter className="mt-auto ml-auto grid w-full max-w-70 grid-cols-2 gap-3">
+      <DialogFooter className="mt-6 flex gap-3">
         <Button
           type="button"
           variant="outline"
           showIcon={false}
-          className="w-full"
           onClick={onCancel}
         >
           Cancel
         </Button>
-        <Button type="button" showIcon={true} onClick={savePaymentDraft}>
+        <Button type="button" showIcon={true} onClick={savePayment}>
           Save
         </Button>
       </DialogFooter>

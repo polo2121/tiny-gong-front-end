@@ -8,7 +8,6 @@ export type CartItem = {
   qty: number;
   price: number;
   discount: number;
-  total: number;
 };
 
 export type SummaryRow = {
@@ -52,7 +51,6 @@ export const cartItems: CartItem[] = [
     qty: 2,
     price: 12000,
     discount: 1000,
-    total: 23000,
   },
   {
     name: "Animal Alphabet Book",
@@ -65,7 +63,6 @@ export const cartItems: CartItem[] = [
     qty: 3,
     price: 6500,
     discount: 500,
-    total: 19000,
   },
   {
     name: "Wooden Shape Puzzle",
@@ -79,7 +76,6 @@ export const cartItems: CartItem[] = [
     qty: 1,
     price: 13000,
     discount: 0,
-    total: 13000,
   },
 ];
 
@@ -99,7 +95,7 @@ export const orderTotals = {
   change: 5000,
 };
 
-export const mockCustomers: ExistingCustomer[] = [
+export const sampleCustomers: ExistingCustomer[] = [
   {
     id: "customer_001",
     name: "May Thu",
@@ -120,7 +116,7 @@ export const mockCustomers: ExistingCustomer[] = [
   },
 ];
 
-export const mockProducts: ProductSearchResult[] = [
+export const sampleProducts: ProductSearchResult[] = [
   {
     id: "prod_1001",
     name: "Dino Cotton T-Shirt",

@@ -1,15 +1,15 @@
 "use client";
 
-import { usePurchaseStore } from "../_stores/use-purchase-store";
+import { usePurchases } from "../_hooks/use-purchases";
 
 export function PurchaseStorePreview() {
-  const purchases = usePurchaseStore((state) => state.purchases);
+  const { data: purchases = [] } = usePurchases();
 
   return (
     <section className="rounded-2xl border border-dashed border-hightlight/25 bg-slate-950 p-4 text-white shadow-card">
       <div className="mb-3 flex items-center justify-between gap-4">
         <h2 className="font-margarine text-sm tracking-wide">
-          Purchase Store Preview
+          Purchase API Preview
         </h2>
         <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">
           Live

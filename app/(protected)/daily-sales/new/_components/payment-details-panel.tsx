@@ -21,18 +21,18 @@ import { useSaleDraftStore } from "../_stores/use-sale-draft-store";
 export function PaymentDetailsPanel() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const savedPaymentDraft = useSaleDraftStore((state) => state.payment);
+  const paymentDraft = useSaleDraftStore((state) => state.payment);
   const setPaymentDraft = useSaleDraftStore((state) => state.setPayment);
-  const savedPaymentResult = paymentDraftSchema.safeParse(
-    savedPaymentDraft,
-  );
-  const savedPayment = savedPaymentResult.success
-    ? savedPaymentResult.data
-    : null;
+  const result = paymentDraftSchema.safeParse(paymentDraft);
+  const savedPayment = result.success ? result.data : null;
   const hasSavedPayment = Boolean(savedPayment);
 
   function openModal() {
     setIsOpen(true);
+  }
+
+  function handleOpenChange(nextOpen: boolean) {
+    setIsOpen(nextOpen);
   }
 
   function savePaymentDraft(paymentDraft: PaymentDraft) {
@@ -41,7 +41,7 @@ export function PaymentDetailsPanel() {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DraftPreviewCard
         title="Payment Details"
         subLabel="ငွေးပေးချေမှုအချက်အလက်"
@@ -51,7 +51,7 @@ export function PaymentDetailsPanel() {
         <PaymentPreview payment={savedPayment} />
       </DraftPreviewCard>
 
-      <DialogContent className="flex min-h-124 max-w-4xl flex-col p-8">
+      <DialogContent className="flex w-200 max-w-none flex-col p-8">
         <DialogHeader>
           <DialogTitle>
             <DualText label="Add Payment" subLabel="ငွေပေးချေမှုအချက်အလက်" />

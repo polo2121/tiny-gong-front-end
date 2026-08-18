@@ -5,7 +5,7 @@ import { CategoryBadge } from "../category-badge";
 
 export function CartItemIdentity({ item }: { item: CartItem }) {
   return (
-    <div className="flex gap-4 bg-amber-100">
+    <div className="flex gap-4">
       <ImagePreview src="" alt="s" />
 
       <div className="flex min-w-0 flex-col items-start gap-1 ">

@@ -34,7 +34,7 @@ export function MobileCartList({ items }: { items: CartItem[] }) {
             </div>
             <CartDetail
               label="Total"
-              value={`${formatCurrency(item.total)} MMK`}
+              value={`${formatCurrency(item.price * item.qty - item.discount)} MMK`}
               className="text-lg"
             />
           </dl>

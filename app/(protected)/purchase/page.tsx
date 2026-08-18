@@ -1,13 +1,17 @@
 import PageHeader from "@/components/PageHeader";
 import DualText from "@/components/DualText";
 
+import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 
 import { NewPurchaseDrawer } from "./_components/new-purchase-drawer";
 import { PurchaseRecordsTable } from "./_components/purchase-records-table";
 import { PurchaseStorePreview } from "./_components/purchase-store-preview";
+import { getPurchasePageData } from "./_services/purchase-api";
 
-export default function PurchasePage() {
+export default async function PurchasePage() {
+  const { purchases, error } = await getPurchasePageData();
+
   return (
     <PageHeader title="Purchase" subtitle="ဝယ်ယူမှုစာရင်း">
       <section className="flex w-full flex-col gap-6">
@@ -19,6 +23,14 @@ export default function PurchasePage() {
         </div>
 
         <PurchaseStorePreview />
+
+        {error && (
+          <Alert
+            tone="destructive"
+            title="Could not load purchases"
+            description={error}
+          />
+        )}
 
         <section className="flex flex-col gap-4">
           <header className="flex flex-col gap-4">
@@ -37,7 +49,7 @@ export default function PurchasePage() {
             </div>
           </header>
 
-          <PurchaseRecordsTable />
+          <PurchaseRecordsTable initialPurchases={purchases} />
         </section>
       </section>
     </PageHeader>

@@ -3,7 +3,7 @@ import ImagePreview from "@/components/ImagePreview";
 import { TrashIcon } from "@/components/icons/TrashIcon";
 import { Button } from "@/components/ui/button";
 
-import type { RegisteredProduct } from "../../_stores/use-purchase-store";
+import type { RegisteredProduct } from "../../_types/purchase";
 
 type ProductCardProps = {
   product: RegisteredProduct;
@@ -60,7 +60,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </header>
 
-      <div className="rounded-lg bg-white/80 px-4 py-4 shadow-card">
+      <div className="rounded-lg bg-white px-4 py-4 shadow-card">
         <div className="overflow-x-auto scrollbar-soft">
           <div className="min-w-150">
             <div className="grid grid-cols-[96px_1fr_1fr_1fr_88px_96px] gap-3 border-b border-dashed border-slate-5  px-3 pb-3 font-margarine text-sm text-muted-foreground">

@@ -35,7 +35,7 @@ export function PaymentPreview({ payment }: PaymentPreviewProps) {
         </div>
       )}
 
-      {payment.status === "paid" && payment.provider && (
+      {payment.status === "paid" && "provider" in payment && (
         <div className="flex items-start justify-between gap-4">
           <dt className="opacity-65">Provider</dt>
           <dd className="max-w-48 text-right text-base font-bold text-slate-950 capitalize">

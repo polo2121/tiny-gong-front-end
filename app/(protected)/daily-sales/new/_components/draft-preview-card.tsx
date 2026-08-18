@@ -20,13 +20,14 @@ export function DraftPreviewCard({
   children,
 }: DraftPreviewCardProps) {
   return (
-    <section className="flex w-full flex-col gap-4 rounded-2xl border border-dashed border-gray-300 px-4 py-6 shadow-card">
+    <section className="flex w-full flex-col gap-4 rounded-2xl border border-dashed border-gray-300 px-5 py-6">
       <div className="flex items-start justify-between gap-4">
         <DualText label={title} subLabel={subLabel} />
 
         <Button
           type="button"
           variant="ghost"
+          size="fit"
           showIcon={false}
           className="text-highlight-soft"
           onClick={onAction}

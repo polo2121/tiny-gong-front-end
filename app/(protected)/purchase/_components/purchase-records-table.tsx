@@ -12,12 +12,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatCurrency } from "@/lib/currency";
 
-import { usePurchaseStore } from "../_stores/use-purchase-store";
+import { EditPurchaseDrawer } from "./edit-purchase-drawer";
+import { useDeletePurchase, usePurchases } from "../_hooks/use-purchases";
+import type { PurchaseRecord } from "../_types/purchase";
+import { DestructiveConfirmation } from "@/components/DestructiveConfirmation";
+import { Button } from "@/components/ui/button";
 
-export function PurchaseRecordsTable() {
-  const purchases = usePurchaseStore((state) => state.purchases);
-  const removePurchase = usePurchaseStore((state) => state.removePurchase);
+type PurchaseRecordsTableProps = {
+  initialPurchases: PurchaseRecord[];
+};
+
+export function PurchaseRecordsTable({
+  initialPurchases,
+}: PurchaseRecordsTableProps) {
+  const { data: purchases = [] } = usePurchases(initialPurchases);
+  const deletePurchase = useDeletePurchase();
 
   return (
     <TableContainer>
@@ -27,23 +38,13 @@ export function PurchaseRecordsTable() {
             <TableHead>Purchase ID</TableHead>
             <TableHead>Supplier</TableHead>
             <TableHead>Products</TableHead>
-            <TableHead>Variants</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="text-right">Total Price</TableHead>
             <TableHead className="text-right">Purchase Date</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {purchases.map((purchase) => {
-            const registeredVariants = purchase.registeredProducts.reduce(
-              (total, product) => total + product.registeredVariantIds.length,
-              0,
-            );
-            const expectedVariants = purchase.registeredProducts.reduce(
-              (total, product) => total + product.expectedVariants,
-              0,
-            );
-
             return (
               <TableRow key={purchase.id}>
                 <TableCell className="font-bold">{purchase.id}</TableCell>
@@ -56,12 +57,8 @@ export function PurchaseRecordsTable() {
                   {purchase.expectedProducts}
                 </TableCell>
 
-                <TableCell>
-                  {registeredVariants}/{expectedVariants}
-                </TableCell>
-
                 <TableCell className="text-right font-semibold">
-                  {purchase.amount}
+                  {formatCurrency(purchase.totalPrice)} MMK
                 </TableCell>
                 <TableCell className="text-right">{purchase.date}</TableCell>
                 <TableCell>
@@ -69,16 +66,22 @@ export function PurchaseRecordsTable() {
                     <TableActionLink href={`/purchase/${purchase.id}`}>
                       View
                     </TableActionLink>
-                    <TableActionLink href={`/purchase/${purchase.id}/edit`}>
-                      Edit
-                    </TableActionLink>
-                    <TableActionButton
-                      tone="destructive"
-                      aria-label={`Remove ${purchase.id}`}
-                      onClick={() => removePurchase(purchase.id)}
-                    >
-                      <TrashIcon className="size-4" />
-                    </TableActionButton>
+                    <EditPurchaseDrawer purchase={purchase} />
+                    <DestructiveConfirmation
+                      trigger={
+                        <Button
+                          size="fit"
+                          variant="outline-dashed"
+                          tone="destructive"
+                          showIcon={false}
+                        >
+                          <TrashIcon className="size-4" />
+                        </Button>
+                      }
+                      title="ကုန်ကျစရိတ်ကို ဖျက်မလား?"
+                      description="ဒီကုန်ကျစရိတ်ကို အပြီးတိုင်ဖျက်သွားမှာဖြစ်ပြီး ပြန်လည်ရယူနိုင်တော့မှာ မဟုတ်ပါ။"
+                      onConfirm={() => deletePurchase.mutateAsync(purchase.id)}
+                    />
                   </div>
                 </TableCell>
               </TableRow>

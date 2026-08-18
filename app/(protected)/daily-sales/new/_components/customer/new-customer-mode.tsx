@@ -79,7 +79,7 @@ export function NewCustomerMode({ onSave, onCancel }: NewCustomerModeProps) {
         )}
       </Field>
 
-      <div className="ml-auto grid w-full max-w-70 grid-cols-2 gap-3">
+      <div className="grid w-full grid-cols-2 gap-3">
         <Button
           type="button"
           variant="outline"

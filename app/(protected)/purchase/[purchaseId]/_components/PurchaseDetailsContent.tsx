@@ -1,12 +1,9 @@
-"use client";
-
 import Link from "next/link";
 
 import DualText from "@/components/DualText";
 
 import { PurchaseDetails } from "./PurchaseDetails";
 import { PurchaseProgressSummary } from "../../_components/purchase-progress-summary";
-import { usePurchaseStore } from "../../_stores/use-purchase-store";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { TrashIcon } from "@/components/icons/TrashIcon";
@@ -19,12 +16,17 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { DocumentNotFoundIcon } from "@/components/icons/DocumentNotFoundIcon";
+import type { PurchaseRecord } from "../../_types/purchase";
 
-export function PurchaseDetailsContent({ purchaseId }: { purchaseId: string }) {
-  const purchase = usePurchaseStore((state) =>
-    state.purchases.find((purchaseItem) => purchaseItem.id === purchaseId),
-  );
+type PurchaseDetailsContentProps = {
+  purchase: PurchaseRecord | null;
+  purchaseId: string;
+};
 
+export function PurchaseDetailsContent({
+  purchase,
+  purchaseId,
+}: PurchaseDetailsContentProps) {
   if (!purchase) {
     return (
       <Empty className="rounded-2xl bg-slate-50 min-h-100">

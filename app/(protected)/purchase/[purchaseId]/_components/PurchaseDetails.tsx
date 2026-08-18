@@ -1,6 +1,7 @@
 import DualText from "@/components/DualText";
 
-import type { PurchaseRecord } from "../../_stores/use-purchase-store";
+import type { PurchaseRecord } from "../../_types/purchase";
+import { formatCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 
 type PurchaseDetailsProps = {
@@ -24,7 +25,7 @@ export function PurchaseDetails({ purchase }: PurchaseDetailsProps) {
     {
       label: "Amount",
       subLabel: "ပမာဏ",
-      value: purchase.amount,
+      value: `${formatCurrency(purchase.totalPrice)} MMK`,
     },
     {
       label: "Note",

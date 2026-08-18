@@ -52,7 +52,7 @@ function AmountStepper({
   return (
     <div
       className={cn(
-        "inline-grid w-full grid-cols-[2.5rem_minmax(2.5rem,1fr)_2.5rem] items-center border-hightlight/15 bg-red text-sm font-bold gap-1",
+        "w-fit items-center border-hightlight/15 bg-red text-sm font-bold gap-1",
         disabled && "opacity-50",
         className,
       )}
@@ -63,23 +63,15 @@ function AmountStepper({
         aria-label={decrementLabel}
         disabled={!canDecrease}
         className={cn(
-          "flex  items-center justify-center text-hightlight transition hover:bg-highlight/10 disabled:pointer-events-none disabled:opacity-40 border rounded-sm border-dashed border-hightlight cursor-pointer shadow-card",
-          size === "sm" && "w-fit h-fit p-2",
-          size === "default" && "h-full w-full",
+          "w-fit min-w-0 border border-dashed rounded-sm p-2 border-highlight-soft text-highlight bg-white shadow-card",
         )}
         onClick={decrease}
       >
         <Minus className="size-4" aria-hidden="true" />
       </Button>
 
-      {/* <output
-        className="min-w-10 px-2 text-center tabular-nums text-slate-950"
-        aria-live="polite"
-      >
-        {value}
-      </output> */}
       <Input
-        className="rounded-sm p-0 h-full text-foreground text-center flex items-center justify-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        className="w-10 h-full rounded-sm p-0 text-foreground text-center flex items-center justify-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none bg-transparent font-bold"
         type="number"
         value={value}
         readOnly
@@ -91,9 +83,7 @@ function AmountStepper({
         aria-label={incrementLabel}
         disabled={!canIncrease}
         className={cn(
-          "flex  items-center justify-center text-hightlight transition hover:bg-highlight/10 disabled:pointer-events-none disabled:opacity-40 border rounded-sm border-dashed border-hightlight cursor-pointer shadow-card",
-          size === "sm" && "w-fit h-fit ",
-          size === "default" && "w-full h-full",
+          "w-fit min-w-0 border border-dashed rounded-sm p-2 border-highlight-soft text-highlight bg-white shadow-card",
         )}
         onClick={increase}
       >

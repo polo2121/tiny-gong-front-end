@@ -1,7 +1,7 @@
 import DualText from "@/components/DualText";
 import { StatusBadge } from "@/components/ui/status-badge";
 
-import type { PurchaseRecord } from "../_stores/use-purchase-store";
+import type { PurchaseRecord } from "../_types/purchase";
 import { SparkleIcon } from "lucide-react";
 import { ThreeSparklesIcon } from "@/components/icons/ThreeSparklesIcon";
 

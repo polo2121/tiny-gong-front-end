@@ -5,7 +5,7 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { formatCurrency } from "@/lib/currency";
 
-import { mockProducts, type ProductSearchResult } from "../_data";
+import { sampleProducts, type ProductSearchResult } from "../_data";
 import { useSaleDraftStore } from "../_stores/use-sale-draft-store";
 import { CategoryBadge } from "./category-badge";
 import { useState } from "react";
@@ -13,13 +13,13 @@ import { useState } from "react";
 function searchProducts(query: string) {
   const normalizedQuery = query.trim().toLowerCase();
 
-  // Backend trace: replace this mock filter with an API call or server action
+  // Backend trace: replace this temporary filter with an API call or server action
   // when product search is available.
   if (!normalizedQuery) {
-    return mockProducts.slice(0, 3);
+    return sampleProducts.slice(0, 3);
   }
 
-  return mockProducts.filter((product) =>
+  return sampleProducts.filter((product) =>
     [
       product.name,
       product.sku,
@@ -49,7 +49,6 @@ export function SaleItemSearch() {
       qty: 1,
       price: selectedProduct.price,
       discount: 0,
-      total: selectedProduct.price,
     });
     setProductSearchQuery("");
     setIsSearchOpen(false);

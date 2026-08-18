@@ -6,7 +6,7 @@ import { immer } from "zustand/middleware/immer";
 import type {
   PurchaseRecord,
   RegisteredProduct,
-} from "./use-purchase-store";
+} from "../_types/purchase";
 
 type PurchaseProductDraft = {
   purchaseId: string;

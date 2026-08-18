@@ -13,11 +13,10 @@ type SaleDraftStore = {
   customer: Customer | null;
   payment: Payment | null;
   note: string;
+
   setCustomer: (customer: Customer | null) => void;
   setPayment: (payment: Payment | null) => void;
 
-  increaseItemQuantity: (sku: string) => void;
-  decreaseItemQuantity: (sku: string) => void;
   setItemQuantity: (sku: string, quantity: number) => void;
   setItemDiscount: (sku: string, discountAmount: number) => void;
 
@@ -40,17 +39,10 @@ export const useSaleDraftStore = create<SaleDraftStore>((set) => ({
     set((state) => ({
       items: addCartItem(state.items, item),
     })),
-  increaseItemQuantity: (sku) =>
-    set((state) => ({
-      items: updateCartItemQuantity(state.items, sku, 1),
-    })),
-  decreaseItemQuantity: (sku) =>
-    set((state) => ({
-      items: updateCartItemQuantity(state.items, sku, -1),
-    })),
+
   setItemQuantity: (sku, quantity) =>
     set((state) => ({
-      items: setCartItemQuantity(state.items, sku, quantity),
+      items: updateQuantity(state.items, sku, quantity, "set"),
     })),
   setItemDiscount: (sku, discountAmount) =>
     set((state) => ({
@@ -75,56 +67,20 @@ function addCartItem(items: CartItem[], nextItem: CartItem) {
   if (!existingItem) {
     return [...items, nextItem];
   }
+  return updateQuantity(items, nextItem.sku, nextItem.qty, "add");
+}
 
+function updateQuantity(items: CartItem[], sku: string, quantity: number, type: "add" | "set") {
   return items.map((item) => {
-    if (item.sku !== nextItem.sku) {
-      return item;
-    }
+    if (item.sku !== sku) return item;
 
-    const qty = item.qty + nextItem.qty;
-    const discount = item.discount + nextItem.discount;
+    const qty = type === "add" ? item.qty + 1 : quantity;
 
     return {
       ...item,
-      qty,
-      discount,
-      total: getLineTotal(item.price, qty, discount),
+      qty: Math.max(1, qty),
     };
   });
-}
-
-function updateCartItemQuantity(
-  items: CartItem[],
-  sku: string,
-  quantityChange: number,
-) {
-  return items.map((item) => {
-    if (item.sku !== sku) {
-      return item;
-    }
-
-    return updateQuantity(item, item.qty + quantityChange);
-  });
-}
-
-function setCartItemQuantity(items: CartItem[], sku: string, quantity: number) {
-  return items.map((item) => {
-    if (item.sku !== sku) {
-      return item;
-    }
-    return updateQuantity(item, quantity);
-  });
-}
-
-function updateQuantity(item: CartItem, quantity: number): CartItem {
-  const qty = Math.max(1, quantity);
-  const discount = item.discount;
-
-  return {
-    ...item,
-    qty,
-    total: getLineTotal(item.price, qty, discount),
-  };
 }
 
 function setCartItemDiscount(
@@ -143,7 +99,6 @@ function setCartItemDiscount(
     return {
       ...item,
       discount,
-      total: getLineTotal(item.price, item.qty, discount),
     };
   });
 }
@@ -164,8 +119,4 @@ export function getSaleTotals(items: CartItem[]) {
     taxFees: "0",
     grandTotal: formatCurrency(grandTotal),
   };
-}
-
-function getLineTotal(price: number, qty: number, discount: number) {
-  return price * qty - discount;
 }

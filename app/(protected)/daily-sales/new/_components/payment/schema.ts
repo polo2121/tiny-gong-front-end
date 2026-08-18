@@ -1,44 +1,34 @@
 import { z } from "zod";
 
-import { bankingOptions, mobileWalletOptions } from "./constants";
+const unpaidPaymentSchema = z.object({
+  status: z.literal("unpaid"),
+  method: z.null(),
+  provider: z.null(),
+});
 
-const bankingProviderValues = bankingOptions.map((option) => option.value) as [
-  (typeof bankingOptions)[number]["value"],
-  ...(typeof bankingOptions)[number]["value"][],
-];
+const cashPaymentSchema = z.object({
+  status: z.literal("paid"),
+  method: z.literal("cash"),
+  provider: z.null(),
+});
 
-const mobileWalletProviderValues = mobileWalletOptions.map(
-  (option) => option.value,
-) as [
-  (typeof mobileWalletOptions)[number]["value"],
-  ...(typeof mobileWalletOptions)[number]["value"][],
-];
+const walletPaymentSchema = z.object({
+  status: z.literal("paid"),
+  method: z.literal("wallet"),
+  provider: z.enum(["k-pay", "wave-pay", "aya-pay", "uab-pay", "cb-pay", "yoma-pay"]),
+});
+
+const bankPaymentSchema = z.object({
+  status: z.literal("paid"),
+  method: z.literal("bank"),
+  provider: z.enum(["kbz-bank", "aya-bank", "uab-bank", "agd-bank", "cb-bank", "yoma-bank"]),
+});
 
 export const paymentDraftSchema = z.union([
-  z.object({
-    status: z.literal("unpaid"),
-    method: z.enum(["cash", "wallet", "bank"]),
-    provider: z.null(),
-  }),
-  z.object({
-    status: z.literal("paid"),
-    method: z.literal("cash"),
-    provider: z.null(),
-  }),
-  z.object({
-    status: z.literal("paid"),
-    method: z.literal("wallet"),
-    provider: z.enum(mobileWalletProviderValues, {
-      error: "Choose a wallet provider.",
-    }),
-  }),
-  z.object({
-    status: z.literal("paid"),
-    method: z.literal("bank"),
-    provider: z.enum(bankingProviderValues, {
-      error: "Choose a bank provider.",
-    }),
-  }),
+  unpaidPaymentSchema,
+  cashPaymentSchema,
+  walletPaymentSchema,
+  bankPaymentSchema,
 ]);
 
 export type PaymentDraft = z.infer<typeof paymentDraftSchema>;

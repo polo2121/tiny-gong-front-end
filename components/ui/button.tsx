@@ -10,14 +10,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-white shadow-card hover:bg-highlight-soft active:bg-highlight",
+          "bg-primary text-white shadow-button hover:bg-highlight-soft active:bg-highlight ring-3 ring-slate-200",
         outline:
           "border border-hightlight text-hightlight hover:border-hightlight hover:bg-highlight/10 hover:text-highlight-soft",
         "outline-dashed": "border border-dashed border-hightlight",
         secondary: "bg-pink-50 text-pink-700 shadow-card hover:bg-pink-100",
         ghost: "text-hightlight hover:bg-highlight/10 hover:text-hightlight",
         destructive:
-          "bg-red-700 text-white shadow-card hover:bg-red-800 active:bg-red-900",
+          "bg-red-700 text-white shadow-card hover:bg-red-600/80 active:bg-red-900",
         link: "h-auto rounded-none px-0 text-hightlight underline-offset-4 hover:underline",
         custom: "",
       },
@@ -65,7 +65,7 @@ function Button({
       <span className="inline-flex items-center justify-center gap-2 relative">
         {children}
         {showIcon && (
-          <TwoSparklesIcon className="absolute -top-1 -right-4 size-4 rotate-90" />
+          <TwoSparklesIcon className="absolute top-0 -right-3 size-3 rotate-90" />
         )}
       </span>
     </button>
