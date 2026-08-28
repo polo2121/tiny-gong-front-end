@@ -1,6 +1,6 @@
 "use client";
 
-import { AmountStepper } from "@/components/ui/amount-stepper";
+import { AmountStepper } from "@/components/AmountStepper";
 import { formatCurrency } from "@/lib/currency";
 
 import type { CartItem } from "../../_data";

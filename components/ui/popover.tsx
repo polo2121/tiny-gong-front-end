@@ -45,7 +45,7 @@ function PopoverContent({
         <PopoverPrimitive.Popup
           data-slot="popover-content"
           className={cn(
-            "w-72 rounded-2xl border border-hightlight/15 bg-white p-4 text-foreground shadow-nav-card outline-none",
+            "w-72 rounded-2xl bg-white p-4 text-foreground shadow-card outline-none border border-slate-300/20",
             "transition-[opacity,scale,translate] duration-200 ease-out",
             "data-ending-style:scale-95 data-ending-style:opacity-0",
             "data-starting-style:scale-95 data-starting-style:opacity-0",

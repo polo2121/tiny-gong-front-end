@@ -1,9 +1,7 @@
 import { cn } from "@/lib/utils";
 
-import type { ProductCategory } from "../_data";
-
 type CategoryBadgeProps = {
-  category: ProductCategory;
+  category: string;
   className?: string;
 };
 

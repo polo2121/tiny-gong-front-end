@@ -1,8 +1,9 @@
 import PageHeader from "@/components/PageHeader";
 
-import { ProductList } from "./_components/ProductList";
-import { PurchaseDetailsContent } from "./_components/PurchaseDetailsContent";
-import { fetchPurchaseDetails } from "../_services/purchase-api";
+import { PurchaseDetailsView } from "./_components/PurchaseDetailsView";
+import { getPurchaseDetailsByIdPageData } from "../_services/purchase-api";
+import { PurchaseLoadErrorState } from "./_components/states/PurchaseLoadErrorState";
+import { PurchaseNotFoundState } from "./_components/states/PurchaseNotFoundState";
 
 type PurchaseDetailsPageProps = {
   params: Promise<{
@@ -14,18 +15,23 @@ export default async function PurchaseDetailsPage({
   params,
 }: PurchaseDetailsPageProps) {
   const { purchaseId } = await params;
-  const purchase = await fetchPurchaseDetails(purchaseId);
+  const { purchaseDetails, error } =
+    await getPurchaseDetailsByIdPageData(purchaseId);
+
+  function renderContent() {
+    if (error) return <PurchaseLoadErrorState error={error} />;
+    if (!purchaseDetails) return <PurchaseNotFoundState />;
+    return (
+      <PurchaseDetailsView
+        purchaseDetails={purchaseDetails}
+        purchaseId={purchaseId}
+      />
+    );
+  }
 
   return (
     <PageHeader title="Purchase Details" subtitle="ဝယ်ယူမှုအသေးစိတ်">
-      {purchase ? (
-        <section className="flex w-full gap-6 mb-10">
-          <ProductList purchase={purchase} />
-          <PurchaseDetailsContent purchase={purchase} purchaseId={purchaseId} />
-        </section>
-      ) : (
-        <PurchaseDetailsContent purchase={null} purchaseId={purchaseId} />
-      )}
+      {renderContent()}
     </PageHeader>
   );
 }

@@ -91,7 +91,7 @@ export default function Sidebar() {
         </nav>
       </header>
 
-      <aside className="sticky top-0 hidden h-screen w-18 shrink-0 bg-white/90 px-3 py-6 backdrop-blur transition-[width] duration-200 ease-out lg:flex lg:flex-col 2xl:w-50 2xl:px-4">
+      <aside className="sticky top-0 hidden h-screen w-18 shrink-0 bg-teal-50/30 px-3 py-6 backdrop-blur transition-[width] duration-200 ease-out lg:flex lg:flex-col 2xl:w-50 2xl:px-4">
         <Link
           href="/"
           className="mb-8 flex justify-center items-center rounded-lg transition bg-gray-50"

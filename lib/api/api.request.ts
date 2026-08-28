@@ -34,13 +34,17 @@ export async function apiRequest<T>({
   body,
   schema,
 }: ApiRequestWithSchema<T> | ApiRequestWithoutSchema): Promise<T | void> {
+
   const hasBody = body !== undefined;
+
   const controller = new AbortController();
+
   const timeoutId = setTimeout(() => {
     controller.abort();
   }, requestTimeoutMilliseconds);
-  let response: Response;
 
+
+  let response: Response;
   try {
     response = await fetch(url, {
       method,
@@ -64,7 +68,6 @@ export async function apiRequest<T>({
 
   if (!response.ok) {
     let errorBody: unknown;
-
     try {
       errorBody = await response.json();
     } catch {
@@ -79,7 +82,7 @@ export async function apiRequest<T>({
       throw appErrors.invalidApiErrorResponse(response.status);
     }
 
-    throw appErrors.fromApi({
+    throw appErrors.expectedErroResponseShape({
       code: result.data.error.code,
       status: result.data.error.status,
       details: result.data.error.fields,
@@ -97,14 +100,11 @@ export async function apiRequest<T>({
   } catch {
     throw appErrors.invalidApiResponse(response.status);
   }
-
   const result = ApiSuccessSchema(schema).safeParse(bodyData);
-
+   
   if (!result.success) {
     throw appErrors.invalidApiResponse(response.status);
   }
-
   const responseBody = result.data as { data: T };
-
   return responseBody.data;
 }

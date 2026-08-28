@@ -41,7 +41,7 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
     <tbody
       data-slot="table-body"
       className={cn(
-        "[&_tr:nth-child(even)]:bg-highlight/5 [&_tr:last-child_td]:border-b-0",
+        "[&_tr:nth-child(even):not([data-loading=true])]:bg-highlight/5 [&_tr:last-child_td]:border-b-0 ",
         className,
       )}
       {...props}
@@ -64,7 +64,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "transition-colors hover:bg-muted/40 data-[state=selected]:bg-muted",
+        "transition-colors data-[state=selected]:bg-muted ",
         className,
       )}
       {...props}

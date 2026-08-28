@@ -17,12 +17,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
+import DualText from "@/components/DualText";
 import {
-  purchaseFormSchema,
-  type PurchaseFormValues,
+  PurchaseRecord,
+  purchaseRecordFormValuesSchema,
+  type PurchaseRecordFormValues,
 } from "../_schemas/purchase-schema";
 
-type PurchaseFieldName = keyof PurchaseFormValues;
+import { useCreatePurchase, useUpdatePurchase } from "../_hooks/use-purchases";
+
+type PurchaseFieldName = keyof PurchaseRecordFormValues;
 
 type PurchaseField = {
   id: string;
@@ -34,15 +38,21 @@ type PurchaseField = {
   description?: string;
   required?: boolean;
   multiline?: boolean;
+  className?: string;
 };
 
 type PurchaseFormProps = {
-  defaultValues: PurchaseFormValues;
-  submitLabel: string;
-  submittingLabel?: string;
-  isSubmitting?: boolean;
-  secondaryAction?: ReactNode;
-  onSubmit: (values: PurchaseFormValues) => void | Promise<void>;
+  purchase?: PurchaseRecord | null;
+  onClose: () => void;
+};
+
+const emptyPurchaseValues: PurchaseRecordFormValues = {
+  supplier: "",
+  expectedProducts: 0,
+  expectedVariants: 0,
+  date: "",
+  totalPrice: 0,
+  note: null,
 };
 
 const purchaseFields: PurchaseField[] = [
@@ -56,7 +66,7 @@ const purchaseFields: PurchaseField[] = [
   },
   {
     id: "purchase-date",
-    name: "purchaseDate",
+    name: "date",
     label: "Purchase Date",
     subLabel: "ဝယ်ယူသည့်ရက်စွဲ",
     type: "date",
@@ -72,6 +82,15 @@ const purchaseFields: PurchaseField[] = [
     required: true,
   },
   {
+    id: "expected-variants",
+    name: "expectedVariants",
+    label: "Expected Variants",
+    subLabel: "ပစ္စည်း မျိူးကွဲများ",
+    type: "number",
+    placeholder: "5",
+    required: true,
+  },
+  {
     id: "total-price",
     name: "totalPrice",
     label: "Total Price",
@@ -79,6 +98,7 @@ const purchaseFields: PurchaseField[] = [
     type: "number",
     placeholder: "420000",
     required: true,
+    className: "col-span-2",
   },
   {
     id: "note",
@@ -87,52 +107,66 @@ const purchaseFields: PurchaseField[] = [
     subLabel: "မှတ်ချက်",
     placeholder: "Add purchase note",
     multiline: true,
+    className: "col-span-2",
   },
 ];
 
-export function PurchaseForm({
-  defaultValues,
-  submitLabel,
-  submittingLabel = "Saving...",
-  isSubmitting = false,
-  secondaryAction,
-  onSubmit,
-}: PurchaseFormProps) {
+export function PurchaseForm({ purchase, onClose }: PurchaseFormProps) {
+  const createPurchase = useCreatePurchase();
+  const updatePurchase = useUpdatePurchase();
+
+  const isEditing = Boolean(purchase);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<PurchaseFormValues>({
-    resolver: zodResolver(purchaseFormSchema),
-    mode: "onSubmit",
-    defaultValues,
+  } = useForm<PurchaseRecordFormValues>({
+    resolver: zodResolver(purchaseRecordFormValuesSchema),
+    defaultValues: purchase ?? emptyPurchaseValues,
   });
 
-  async function submitPurchase(values: PurchaseFormValues) {
-    await onSubmit({
+  const isSubmitting = createPurchase.isPending || updatePurchase.isPending;
+
+  async function submitPurchase(values: PurchaseRecordFormValues) {
+    const input = {
       ...values,
-      note: values.note?.trim() ? values.note.trim() : null,
-    });
+      note: values.note?.trim() || null,
+    };
+
+    if (purchase) {
+      await updatePurchase.mutateAsync({
+        id: purchase.id,
+        input,
+      });
+
+      return onClose();
+    }
+
+    await createPurchase.mutateAsync(input);
+    onClose();
   }
 
   return (
     <form
-      className="flex min-h-0 flex-col "
       onSubmit={handleSubmit(submitPurchase)}
+      className="flex min-h-0 flex-col"
     >
-      <div className="relative min-h-0">
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-linear-to-b from-popover to-transparent backdrop-blur-[1px]" />
+      <DualText className="pt-4" label="New Purchase" subLabel="ဝယ်ယူမှုအသစ်" />
 
-        <div className="scrollbar-soft max-h-[min(520px,calc(100dvh-14rem))] overflow-y-auto overscroll-contain px-1 py-6">
+      <div className="relative min-h-0 overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-linear-to-b from-popover to-transparent backdrop-blur-[1px] " />
+
+        <div className="scrollbar-soft max-h-[min(520px,calc(100dvh-14rem))] overflow-y-auto overscroll-contain px-1 py-6 pb-16 bg-amber-10">
           <FieldGroup className="grid grid-cols-2 gap-8">
             {purchaseFields.map((field) => {
-              const fieldError = errors[field.name];
+              const error = errors[field.name];
 
               return (
                 <Field
                   key={field.id}
-                  data-invalid={Boolean(fieldError)}
-                  className={field.multiline ? "col-span-2" : undefined}
+                  data-invalid={Boolean(error)}
+                  className={field.className}
                 >
                   <FieldLabel
                     htmlFor={field.id}
@@ -140,12 +174,14 @@ export function PurchaseForm({
                   >
                     <span>
                       {field.label}
+
                       {field.required && (
                         <span aria-hidden="true" className="text-destructive">
                           *
                         </span>
                       )}
                     </span>
+
                     <small className="relative -top-1.25 font-umoe text-sm text-muted-foreground">
                       ({field.subLabel})
                     </small>
@@ -156,10 +192,10 @@ export function PurchaseForm({
                       id={field.id}
                       placeholder={field.placeholder}
                       autoComplete="off"
-                      aria-invalid={Boolean(fieldError)}
+                      aria-invalid={Boolean(error)}
                       className={cn(
                         "rounded-lg",
-                        fieldError && "ring-2 ring-pink-700/30",
+                        error && "ring-2 ring-pink-700/30",
                       )}
                       {...register(field.name)}
                     />
@@ -169,8 +205,8 @@ export function PurchaseForm({
                       type={field.type ?? "text"}
                       placeholder={field.placeholder}
                       autoComplete="off"
-                      aria-invalid={Boolean(fieldError)}
-                      className={cn(fieldError && "ring-2 ring-pink-700/30")}
+                      aria-invalid={Boolean(error)}
+                      className={cn(error && "ring-2 ring-pink-700/30")}
                       {...register(field.name, {
                         valueAsNumber: field.type === "number",
                       })}
@@ -180,9 +216,8 @@ export function PurchaseForm({
                   {field.description && (
                     <FieldDescription>{field.description}</FieldDescription>
                   )}
-                  {fieldError?.message && (
-                    <FieldError>{fieldError.message}</FieldError>
-                  )}
+
+                  {error?.message && <FieldError>{error.message}</FieldError>}
                 </Field>
               );
             })}
@@ -192,13 +227,22 @@ export function PurchaseForm({
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 bg-linear-to-t from-popover to-transparent backdrop-blur-[1px]" />
       </div>
 
-      <div className="shrink-0">
-        <div className="flex justify-end gap-4 pt-2">
-          {secondaryAction}
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? submittingLabel : submitLabel}
-          </Button>
-        </div>
+      <div className="flex shrink-0 justify-end gap-4 pt-2">
+        <Button
+          variant="outline"
+          showIcon={false}
+          disabled={isSubmitting}
+          onClick={onClose}
+        >
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting
+            ? "Saving..."
+            : isEditing
+              ? "Save Changes"
+              : "Create Purchase"}
+        </Button>
       </div>
     </form>
   );

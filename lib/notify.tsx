@@ -1,9 +1,6 @@
 import { toast } from "sonner";
 
-import {
-  Toast,
-  type ToastType,
-} from "@/components/ui/toast";
+import { Toast, type ToastType } from "@/components/ui/toast";
 
 type NotifyOptions = {
   title: string;
@@ -11,10 +8,7 @@ type NotifyOptions = {
   duration?: number;
 };
 
-function createNotification(
-  type: ToastType,
-  options: NotifyOptions
-) {
+function createNotification(type: ToastType, options: NotifyOptions) {
   return toast.custom(
     (id) => (
       <Toast
@@ -26,7 +20,7 @@ function createNotification(
     ),
     {
       duration: options.duration,
-    }
+    },
   );
 }
 

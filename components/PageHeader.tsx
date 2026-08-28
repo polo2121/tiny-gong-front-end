@@ -10,7 +10,7 @@ export default function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="flex w-full flex-col gap-10">
+    <section className="flex w-full flex-col gap-8">
       <DualText label={title} subLabel={subtitle} size="lg" />
       {children}
     </section>

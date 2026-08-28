@@ -167,7 +167,7 @@ export const appErrors = {
    *
    * @param error Validated backend error information.
    */
-  fromApi(error: ApiErrorInput) {
+  expectedErroResponseShape(error: ApiErrorInput) {
     return new AppError({
       code: error.code,
       status: error.status,

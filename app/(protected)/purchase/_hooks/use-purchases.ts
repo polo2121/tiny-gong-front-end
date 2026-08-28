@@ -2,23 +2,42 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/errors/get-error-message";
-import { normalizeError } from "@/lib/errors/normalize-error";
 import {
   createPurchase,
   deletePurchase,
   fetchPurchaseList,
   updatePurchase,
 } from "../_services/purchase-api";
-import type { PurchaseRecord } from "../_types/purchase";
+import { PurchaseRecord } from "../_schemas/purchase-schema";
+import { notify } from "@/lib/notify";
+import { PurchaseRecordFilters }  from "../_schemas/purchase-records-filters-schema"
+
 
 export const purchasesQueryKey = ["purchases"] as const;
 
-export function usePurchases(initialPurchases?: PurchaseRecord[]) {
-  return useQuery({
-    queryKey: purchasesQueryKey,
-    queryFn: fetchPurchaseList,
-    initialData: initialPurchases,
+type UsePurchasesOptions = {
+  initialPurchaseRecords: PurchaseRecord[];
+  filters: PurchaseRecordFilters;
+};
+
+export function usePurchaseRecords({
+  initialPurchaseRecords,
+  filters,
+}: UsePurchasesOptions) {
+  const {search, status } = filters;
+  const shouldUseInitialPurchases = !search.trim() && status === "all";
+
+  const query = useQuery({
+    queryKey: [...purchasesQueryKey, { search, status }],
+    queryFn: () =>
+      fetchPurchaseList({ search, status }),
+    initialData: shouldUseInitialPurchases ? initialPurchaseRecords : undefined,
+    placeholderData: (previousPurchases) => previousPurchases,
   });
+  return {
+    ...query,
+    errorMessage: query.error ? getErrorMessage(query.error) : "",
+  };
 }
 
 export function useCreatePurchase() {
@@ -28,21 +47,22 @@ export function useCreatePurchase() {
     mutationFn: createPurchase,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: purchasesQueryKey });
-      toast.success("Purchase saved successfully.");
+      notify.success({
+        title: "Purchase created",
+        description: "The purchase has been created successfully.",
+      });
     },
   });
 }
 
 export function useUpdatePurchase() {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: updatePurchase,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: purchasesQueryKey });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: purchasesQueryKey });
       toast.success("Purchase updated successfully.");
     },
-
   });
 }
 
@@ -56,9 +76,7 @@ export function useDeletePurchase() {
       toast.success("Purchase removed successfully.");
     },
     onError: (error) => {
-      const appError = normalizeError(error);
-
-      toast.error(getErrorMessage(appError.code));
+      toast.error(getErrorMessage(error));
     },
   });
 }

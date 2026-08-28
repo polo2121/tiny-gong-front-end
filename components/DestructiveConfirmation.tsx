@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { AlertIcon } from "@/components/icons/AlertIcon";
+import { TrashIcon } from "@/components/icons/TrashIcon";
 import { DestructiveActionIllustration } from "@/components/illustrations/DestructiveActionIllustration";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,87 +15,76 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AlertIcon } from "./icons/AlertIcon";
 import { getErrorMessage } from "@/lib/errors/get-error-message";
-import { normalizeError } from "@/lib/errors/normalize-error";
 
-interface DestructiveConfirmationProps {
-  trigger: React.ReactElement;
-  onConfirm: () => void | Promise<void>;
+type DestructiveConfirmationProps = {
   title?: string;
   description?: string;
-}
+  onConfirm: () => Promise<void>;
+  isPending?: boolean;
+  error?: unknown;
+};
 
 export function DestructiveConfirmation({
-  trigger,
   onConfirm,
   title = "Are you sure?",
   description = "This action cannot be undone. Please confirm before continuing.",
+  isPending = false,
+  error,
 }: DestructiveConfirmationProps) {
   const [open, setOpen] = React.useState(false);
-  const [isPending, setIsPending] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+
+  const errorMessage = error ? getErrorMessage(error) : null;
 
   async function handleConfirm() {
-    try {
-      setIsPending(true);
-      await onConfirm();
-      setOpen(false);
-    } catch (error) {
-      const appError = normalizeError(error);
+    await onConfirm();
+    setOpen(false);
+  }
 
-      setErrorMessage(getErrorMessage(appError.code));
-    } finally {
-      setIsPending(false);
-    }
+  function handleOpenChange(nextOpen: boolean) {
+    if (isPending) return;
+    setOpen(nextOpen);
   }
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(nextOpen) => {
-        if (typeof nextOpen !== "boolean") {
-          return;
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger
+        render={
+          <Button
+            type="button"
+            size="fit"
+            variant="outline-dashed"
+            tone="destructive"
+            showIcon={false}
+          >
+            <TrashIcon className="size-4" />
+          </Button>
         }
+      />
 
-        if (!isPending) {
-          setErrorMessage(null);
-          setOpen(nextOpen);
-        }
-      }}
-    >
-      <DialogTrigger render={trigger} />
-
-      <DialogContent className="flex max-w-md flex-col items-center gap-5 p-6 text-center border-3 border-red-100">
+      <DialogContent className="flex max-w-md flex-col items-center gap-5 border-3 border-red-100 p-6 text-center">
         <DestructiveActionIllustration className="h-auto w-40" />
 
         <div className="flex flex-col gap-2">
           <DialogTitle className="font-umoe text-2xl text-foreground">
             {title}
-
-            {/* {subtitle && (
-              <span className="mt-1 block font-umoe text-base text-muted-foreground">
-                ({subtitle})
-              </span>
-            )} */}
           </DialogTitle>
 
-          <DialogDescription className="text-sm font-normal leading-6 text-muted-foreground wrap-break-word">
+          <DialogDescription className="wrap-break-word text-sm font-normal leading-6 text-muted-foreground">
             {description}
           </DialogDescription>
         </div>
 
         {errorMessage && (
-          <div className="w-full flex items-start gap-2 rounded-lg border border-destructive/20 bg-destructive/5 p-3 text-left">
-            <AlertIcon className="size-5 text-destructive" />
+          <div className="flex w-full items-start gap-2 rounded-lg border border-destructive/20 bg-destructive/5 p-3 text-left">
+            <AlertIcon className="size-5 shrink-0 text-destructive" />
+
             <div>
-              <h4 className="text-sm font-margarine text-destructive">
+              <h4 className="font-margarine text-sm text-destructive">
                 {errorMessage}
               </h4>
-              <p className="text-xs font-medium pt-1 ">
-                This will permanently delete your account and remove your data
-                from our servers.
-              </p>
+
+              <p className="pt-1 text-xs font-medium">Please try again.</p>
             </div>
           </div>
         )}

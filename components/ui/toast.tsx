@@ -18,7 +18,7 @@ const icons = {
 };
 
 const iconStyles = {
-  success: "bg-green-50",
+  success: "bg-teal-500/5",
   error: "bg-red-50",
   warning: "bg-amber-100 text-amber-600",
   info: "bg-blue-100 text-blue-600",
@@ -50,13 +50,13 @@ export function Toast({ type, title, description, onClose }: ToastProps) {
       <div
         className={`flex flex-1 rounded-lg justify-center items-center relative ${iconStyles[type]}`}
       >
-        <Icon className="size-18" />
+        <Icon className="size-20 " />
         {/* <DestructiveActionIllustration className="size-2 bg-amber-400" /> */}
       </div>
 
       <div className="flex-3 py-2">
-        <p className="text-sm font-semibold text-foreground line-clamp-1">
-          {title}
+        <p className="text-sm font-margarine text-foreground line-clamp-1">
+          {title}!
         </p>
 
         {description && (

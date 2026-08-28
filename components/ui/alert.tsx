@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
-import { AlertIcon } from "@/components/icons/AlertIcon";
 import { DestructiveAlertIcon } from "@/components/icons/DestructiveAlertIcon";
+import { SearchNotFoundIcon } from "../icons/SearchNotFoundIcon";
 import { cn } from "@/lib/utils";
 
 type AlertTone = "default" | "destructive" | "success" | "warning";
@@ -16,7 +16,7 @@ type AlertProps = {
 };
 
 const alertIcons: Record<AlertTone, ReactNode> = {
-  default: <DestructiveAlertIcon className="size-7" />,
+  default: <SearchNotFoundIcon className="size-8" />,
   destructive: <DestructiveAlertIcon className="size-9" />,
   success: <DestructiveAlertIcon className="size-7" />,
   warning: <DestructiveAlertIcon className="size-7" />,

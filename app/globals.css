@@ -6,9 +6,6 @@
 @import "../styles/animations.css";
 @import "shadcn/tailwind.css";
 
-
-
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -64,10 +61,12 @@
 
   --color-card-surface: var(--surface);
 
-  --shadow-card: inset 0 4px 0 rgb(255 255 255 / 25%),1px 4px 0 rgb(231 231 231 / 25%);
-  --shadow-button: inset 0 3px 0 rgb(255 255 255 / 25%),1px 4px 0 rgb(231 231 231 / 25%);
-  --shadow-nav-card: inset 0 8px 0 rgb(255 255 255 / 25%),1px 8px 0 rgb(231 231 231 / 25%);
-
+  --shadow-card:
+    inset 0 4px 0 rgb(255 255 255 / 25%), 1px 4px 0 rgb(231 231 231 / 25%);
+  --shadow-button:
+    inset 0 3px 0 rgb(255 255 255 / 25%), 1px 4px 0 rgb(231 231 231 / 25%);
+  --shadow-nav-card:
+    inset 0 8px 0 rgb(255 255 255 / 25%), 1px 8px 0 rgb(231 231 231 / 25%);
 
   --color-orange-50: var(--orange-50);
   --color-orange-100: var(--orange-100);
@@ -101,11 +100,7 @@
   --color-teal-700: var(--teal-700);
   --color-teal-800: var(--teal-800);
   --color-teal-900: var(--teal-900);
-
-  
 }
-
-
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -169,23 +164,44 @@
   }
   .scrollbar-soft {
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in oklch, var(--highlight) 35%, transparent)
+    scrollbar-color: color-mix(in oklch, var(--highlight) 0%, transparent)
       transparent;
   }
   .scrollbar-soft::-webkit-scrollbar {
-    width: 8px;
+    width: 1px;
+    height: 1px;
   }
   .scrollbar-soft::-webkit-scrollbar-track {
     background: transparent;
   }
   .scrollbar-soft::-webkit-scrollbar-thumb {
-    background: color-mix(in oklch, var(--highlight) 35%, transparent);
+    background-color: rgba(0, 0, 0, 0.3);
     border: 2px solid transparent;
     border-radius: 999px;
     background-clip: content-box;
+    border-radius: 10px;
   }
   .scrollbar-soft::-webkit-scrollbar-thumb:hover {
     background: color-mix(in oklch, var(--highlight) 55%, transparent);
     background-clip: content-box;
   }
+}
+
+input[type="date"] {
+  position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+}
+
+select {
+  appearance: none;          /* Standard modern browsers */
+  -webkit-appearance: none;  /* Safari and Chrome */
+  -moz-appearance: none;     /* Firefox */
 }

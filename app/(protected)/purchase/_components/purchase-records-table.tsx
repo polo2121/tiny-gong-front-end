@@ -1,9 +1,6 @@
 "use client";
-
-import { TrashIcon } from "@/components/icons/TrashIcon";
 import {
   Table,
-  TableActionButton,
   TableActionLink,
   TableBody,
   TableCell,
@@ -13,22 +10,47 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/currency";
-
-import { EditPurchaseDrawer } from "./edit-purchase-drawer";
-import { useDeletePurchase, usePurchases } from "../_hooks/use-purchases";
+import { useDeletePurchase } from "../_hooks/use-purchases";
 import type { PurchaseRecord } from "../_types/purchase";
 import { DestructiveConfirmation } from "@/components/DestructiveConfirmation";
 import { Button } from "@/components/ui/button";
+import { TableEmptyRow } from "@/components/table/TableEmptyRow";
+import { TableErrorRow } from "@/components/table/TableErrorRow";
+import { TableLoadingRows } from "@/components/table/TableLoadingRows";
 
 type PurchaseRecordsTableProps = {
-  initialPurchases: PurchaseRecord[];
+  purchaseRecords: PurchaseRecord[];
+  hasError?: boolean;
+  isLoading?: boolean;
+  errorMessage?: string;
+  onEdit: (purchase: PurchaseRecord) => void;
 };
 
 export function PurchaseRecordsTable({
-  initialPurchases,
+  purchaseRecords,
+  hasError = false,
+  isLoading = false,
+  errorMessage,
+  onEdit,
 }: PurchaseRecordsTableProps) {
-  const { data: purchases = [] } = usePurchases(initialPurchases);
   const deletePurchase = useDeletePurchase();
+
+  function renderTableState() {
+    if (isLoading) return <TableLoadingRows />;
+    if (hasError)
+      return (
+        <TableErrorRow
+          colSpan={7}
+          title="Could not load purchases."
+          description={errorMessage}
+        />
+      );
+    if (purchaseRecords.length === 0) return <TableEmptyRow colSpan={7} />;
+
+    return null;
+  }
+
+  const tableState = renderTableState();
 
   return (
     <TableContainer>
@@ -38,55 +60,61 @@ export function PurchaseRecordsTable({
             <TableHead>Purchase ID</TableHead>
             <TableHead>Supplier</TableHead>
             <TableHead>Products</TableHead>
+            <TableHead>Variants</TableHead>
             <TableHead className="text-right">Total Price</TableHead>
             <TableHead className="text-right">Purchase Date</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {purchases.map((purchase) => {
-            return (
-              <TableRow key={purchase.id}>
-                <TableCell className="font-bold">{purchase.id}</TableCell>
-                <TableCell className="font-semibold">
-                  {purchase.supplier}
-                </TableCell>
+          {tableState ??
+            purchaseRecords.map((purchase) => {
+              return (
+                <TableRow key={purchase.id}>
+                  <TableCell className="font-bold">{purchase.id}</TableCell>
+                  <TableCell className="font-semibold">
+                    {purchase.supplier}
+                  </TableCell>
 
-                <TableCell className="font-semibold">
-                  {purchase.registeredProducts.length}/
-                  {purchase.expectedProducts}
-                </TableCell>
+                  <TableCell className="font-semibold">
+                    {purchase.expectedProducts}
+                  </TableCell>
 
-                <TableCell className="text-right font-semibold">
-                  {formatCurrency(purchase.totalPrice)} MMK
-                </TableCell>
-                <TableCell className="text-right">{purchase.date}</TableCell>
-                <TableCell>
-                  <div className="flex justify-end gap-2">
-                    <TableActionLink href={`/purchase/${purchase.id}`}>
-                      View
-                    </TableActionLink>
-                    <EditPurchaseDrawer purchase={purchase} />
-                    <DestructiveConfirmation
-                      trigger={
-                        <Button
-                          size="fit"
-                          variant="outline-dashed"
-                          tone="destructive"
-                          showIcon={false}
-                        >
-                          <TrashIcon className="size-4" />
-                        </Button>
-                      }
-                      title="ကုန်ကျစရိတ်ကို ဖျက်မလား?"
-                      description="ဒီကုန်ကျစရိတ်ကို အပြီးတိုင်ဖျက်သွားမှာဖြစ်ပြီး ပြန်လည်ရယူနိုင်တော့မှာ မဟုတ်ပါ။"
-                      onConfirm={() => deletePurchase.mutateAsync(purchase.id)}
-                    />
-                  </div>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+                  <TableCell className="font-semibold">
+                    {purchase.expectedVariants}
+                  </TableCell>
+
+                  <TableCell className="text-right font-semibold">
+                    {formatCurrency(purchase.totalPrice)} MMK
+                  </TableCell>
+                  <TableCell className="text-right">{purchase.date}</TableCell>
+                  <TableCell>
+                    <div className="flex justify-end gap-2">
+                      <TableActionLink href={`/purchase/${purchase.id}`}>
+                        View
+                      </TableActionLink>
+                      <Button
+                        variant="ghost"
+                        size="fit"
+                        showIcon={false}
+                        onClick={() => onEdit(purchase)}
+                      >
+                        Edit
+                      </Button>
+                      <DestructiveConfirmation
+                        title="ကုန်ကျစရိတ်ကို ဖျက်မလား?"
+                        description="ဒီကုန်ကျစရိတ်ကို အပြီးတိုင်ဖျက်သွားမှာဖြစ်ပြီး ပြန်လည်ရယူနိုင်တော့မှာ မဟုတ်ပါ။"
+                        onConfirm={() =>
+                          deletePurchase.mutateAsync(purchase.id)
+                        }
+                        isPending={deletePurchase.isPending}
+                        error={deletePurchase.error}
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
         </TableBody>
       </Table>
     </TableContainer>

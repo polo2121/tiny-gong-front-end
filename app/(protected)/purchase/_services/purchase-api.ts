@@ -1,109 +1,123 @@
-import { z } from "zod";
-
 import { apiRequest } from "@/lib/api/api.request";
 import { getErrorMessage } from "@/lib/errors/get-error-message";
-import { normalizeError } from "@/lib/errors/normalize-error";
-import type { PurchaseRecord } from "../_types/purchase";
-import type { PurchaseFormValues } from "../_schemas/purchase-schema";
+
+import {
+  purchaseRecordSchema,
+  purchaseRecordApiResponseSchema,
+  PurchaseRecord,
+  PurchaseRecordFormValues,
+} from "../_schemas/purchase-schema";
+import { PurchaseRecordFilters } from "../_schemas/purchase-records-filters-schema";
+import {
+  PurchaseDetails,
+  purchaseDetailsApiResponseSchema,
+} from "../[purchaseId]/_schemas/purchase-detail-schema";
 
 const purchaseApiBaseUrl =
   process.env.NEXT_PUBLIC_PURCHASE_API_URL ?? "http://localhost:8787/purchases";
 
-const registeredProductSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  category: z.literal("clothing"),
-  seriesCode: z.string(),
-  sellPrice: z.number(),
-  purchasePrice: z.number(),
-  expectedVariants: z.number(),
-  registeredVariantIds: z.array(z.string()),
-});
+// type FetchPurchaseListOptions = {
+//   searchQuery?: string;
+//   statusFilter?: PurchaseStatusFilter;
+// };
 
-const purchaseRecordSchema = z.object({
-  id: z.string(),
-  supplier: z.string(),
-  expectedProducts: z.number(),
-  registeredProducts: z.array(registeredProductSchema),
-  date: z.string(),
-  totalPrice: z.number(),
-  note: z.string().nullable().optional(),
-});
-
-const purchaseListDataSchema = z.object({
-  purchases: z.array(purchaseRecordSchema),
-});
-
-const purchaseDataSchema = z.object({
-  purchase: purchaseRecordSchema,
-});
-
-export async function fetchPurchaseList(): Promise<PurchaseRecord[]> {
-  const data = await apiRequest({
-    url: purchaseApiBaseUrl,
-    schema: purchaseListDataSchema,
-  });
-
-  return data.purchases;
-}
-
-export async function getPurchasePageData(): Promise<{
-  purchases: PurchaseRecord[];
+export async function getPurchaseListPageData(
+  fitlers: PurchaseRecordFilters,
+): Promise<{
+  purchaseRecords: PurchaseRecord[];
   error: string | null;
 }> {
   try {
-    const purchases = await fetchPurchaseList();
+    const purchaseRecords = await fetchPurchaseList(fitlers);
 
     return {
-      purchases,
+      purchaseRecords,
       error: null,
     };
   } catch (error) {
-    const appError = normalizeError(error);
-
     return {
-      purchases: [],
-      error: getErrorMessage(appError.code),
+      purchaseRecords: [],
+      error: getErrorMessage(error),
     };
   }
 }
 
-export async function fetchPurchaseDetails(
-  purchaseId: string,
-): Promise<PurchaseRecord | null> {
-  const purchases = await fetchPurchaseList();
+export async function getPurchaseDetailsByIdPageData(id: string): Promise<{
+  purchaseDetails: PurchaseDetails | null;
+  error: string | null;
+}> {
+  try {
+    const purchaseDetails = await fetchPurchaseById(id);
 
-  return purchases.find((purchase) => purchase.id === purchaseId) ?? null;
+    return {
+      purchaseDetails,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      purchaseDetails: null,
+      error: getErrorMessage(error),
+    };
+  }
 }
 
-export async function createPurchase(
-  input: PurchaseFormValues,
-): Promise<PurchaseRecord> {
+export async function fetchPurchaseList({
+  search = "",
+  status = "all",
+}: PurchaseRecordFilters): Promise<PurchaseRecord[]> {
+  const url = new URL(purchaseApiBaseUrl);
+  const normalizedQuery = search.trim();
+
+  // Backend trace: when purchase search is ready, the backend should read this
+  // query param and return the already-filtered purchase list.
+  if (normalizedQuery) url.searchParams.set("search", normalizedQuery);
+  else url.searchParams.set("search", "");
+
+  // Backend trace: when purchase status filtering is ready, the backend should
+  // treat "complete" as registeredProducts.length === expectedProducts and
+  // "incomplete" as registeredProducts.length < expectedProducts.
+  if (status !== "all") {
+    url.searchParams.set("status", status);
+  }
+
   const data = await apiRequest({
+    url: url.toString(),
+    schema: purchaseRecordApiResponseSchema,
+  });
+  return data.purchaseRecords;
+}
+
+export async function fetchPurchaseById(
+  purchaseId: string,
+): Promise<PurchaseDetails | null> {
+  const data = await apiRequest({
+    url: `${purchaseApiBaseUrl}/${purchaseId}`,
+    schema: purchaseDetailsApiResponseSchema,
+  });
+
+  return data.purchaseDetails;
+}
+
+export async function createPurchase(input: PurchaseRecordFormValues) {
+  await apiRequest({
     url: purchaseApiBaseUrl,
     method: "POST",
     body: input,
-    schema: purchaseDataSchema,
   });
-
-  return data.purchase;
 }
 
 export async function updatePurchase({
-  purchaseId,
+  id,
   input,
 }: {
-  purchaseId: string;
-  input: PurchaseFormValues;
-}): Promise<PurchaseRecord> {
-  const data = await apiRequest({
-    url: `${purchaseApiBaseUrl}/${purchaseId}`,
+  id: string;
+  input: PurchaseRecordFormValues;
+}): Promise<void> {
+  await apiRequest({
+    url: `${purchaseApiBaseUrl}/${id}`,
     method: "PATCH",
     body: input,
-    schema: purchaseDataSchema,
   });
-
-  return data.purchase;
 }
 
 export async function deletePurchase(purchaseId: string): Promise<void> {

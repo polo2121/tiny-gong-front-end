@@ -27,7 +27,7 @@ const buttonVariants = cva(
           "border-destructive text-destructive hover:bg-destructive/10 hover:text-destructive",
       },
       size: {
-        default: "h-10 min-w-36 px-4 py-2",
+        default: "h-9 min-w-36 px-8 py-2",
         sm: "h-8 min-w-18 px-3 text-xs",
         lg: "h-11 min-w-32 px-6 text-base",
         icon: "size-10",
