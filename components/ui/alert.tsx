@@ -42,7 +42,7 @@ export function Alert({
     <div
       role={tone === "destructive" ? "alert" : "status"}
       className={cn(
-        "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:zoom-in-95 motion-safe:duration-200 motion-reduce:animate-none flex items-start gap-3 rounded-lg border px-4 py-3 text-sm",
+        "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 motion-safe:zoom-in-95 motion-safe:duration-200 motion-reduce:animate-none flex items-start gap-3 rounded-lg border px-4 py-3 text-sm font-medium",
         alertToneStyles[tone],
         className,
       )}
@@ -50,7 +50,9 @@ export function Alert({
       <span className="mt-0.5 shrink-0">{icon ?? defaultIcon}</span>
 
       <div className="min-w-0">
-        {title && <p className="font-margarine leading-5">{title}</p>}
+        {title && (
+          <p className="font-margarine leading-5 font-normal">{title}</p>
+        )}
         {description && (
           <p className="leading-5 opacity-85 font-medium">{description}</p>
         )}

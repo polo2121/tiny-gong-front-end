@@ -9,9 +9,11 @@ import {
 } from "../_schemas/purchase-schema";
 import { PurchaseRecordFilters } from "../_schemas/purchase-records-filters-schema";
 import {
-  PurchaseDetails,
-  purchaseDetailsApiResponseSchema,
-} from "../[purchaseId]/_schemas/purchase-detail-schema";
+  purchaseStatsApiResponseSchema,
+  type PurchaseStats,
+} from "../_schemas/purchase-stats-schema";
+import type { DashboardPeriod } from "@/components/stats/types";
+import type { CustomDateFilterValue } from "@/components/filters/CustomDateFilter";
 
 const purchaseApiBaseUrl =
   process.env.NEXT_PUBLIC_PURCHASE_API_URL ?? "http://localhost:8787/purchases";
@@ -37,25 +39,6 @@ export async function getPurchaseListPageData(
   } catch (error) {
     return {
       purchaseRecords: [],
-      error: getErrorMessage(error),
-    };
-  }
-}
-
-export async function getPurchaseDetailsByIdPageData(id: string): Promise<{
-  purchaseDetails: PurchaseDetails | null;
-  error: string | null;
-}> {
-  try {
-    const purchaseDetails = await fetchPurchaseById(id);
-
-    return {
-      purchaseDetails,
-      error: null,
-    };
-  } catch (error) {
-    return {
-      purchaseDetails: null,
       error: getErrorMessage(error),
     };
   }
@@ -87,15 +70,28 @@ export async function fetchPurchaseList({
   return data.purchaseRecords;
 }
 
-export async function fetchPurchaseById(
-  purchaseId: string,
-): Promise<PurchaseDetails | null> {
+export async function fetchPurchaseStats({
+  period,
+  customDate,
+}: {
+  period: DashboardPeriod;
+  customDate: CustomDateFilterValue | null;
+}): Promise<PurchaseStats> {
+  const url = new URL(`${purchaseApiBaseUrl}/stats`);
+
+  if (customDate) {
+    url.searchParams.set("from", customDate.from);
+    url.searchParams.set("to", customDate.to);
+  } else {
+    url.searchParams.set("period", period);
+  }
+
   const data = await apiRequest({
-    url: `${purchaseApiBaseUrl}/${purchaseId}`,
-    schema: purchaseDetailsApiResponseSchema,
+    url: url.toString(),
+    schema: purchaseStatsApiResponseSchema,
   });
 
-  return data.purchaseDetails;
+  return data.stats;
 }
 
 export async function createPurchase(input: PurchaseRecordFormValues) {

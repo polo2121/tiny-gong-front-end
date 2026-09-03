@@ -4,10 +4,8 @@ import { z } from "zod";
 export const purchaseRecordSchema = z.object({
   id: z.string(),
   supplier: z.string(),
-  expectedProducts: z.number(),
-  expectedVariants: z.number(),
   date: z.string(),
-  totalPrice: z.number(),
+  totalPrice: z.number().nullable(),
   note: z.string().nullable().optional(),
 });
 

@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  BarChart3,
-  Boxes,
-  FileText,
-  Home,
-  Package,
-  ReceiptText,
-  WalletCards,
-} from "lucide-react";
+  BoxesIcon,
+  ChartBarIncreasingIcon,
+  FileTextIcon,
+  Home01Icon,
+  PackageSearch01Icon,
+  ReceiptIcon,
+  WalletDone02Icon,
+} from "@hugeicons/core-free-icons";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { cn } from "@/lib/utils";
 import { TwoSparklesIcon } from "./icons/TwoSparklesIcon";
@@ -20,37 +21,37 @@ const navItems = [
     title: "Daily Sales",
     subtitle: "နေ့စဉ်အရောင်းစာရင်း",
     href: "/daily-sales",
-    icon: BarChart3,
+    icon: ChartBarIncreasingIcon,
   },
   {
     title: "Inventory",
     subtitle: "ပစ္စည်း စီမံခန့်ခွဲ",
     href: "/inventory",
-    icon: Boxes,
+    icon: BoxesIcon,
   },
   {
     title: "Products",
     subtitle: "ပစ္စည်းလက်ကျန်",
     href: "/products",
-    icon: Package,
+    icon: PackageSearch01Icon,
   },
   {
     title: "Expenses",
     subtitle: "အသုံးစရိတ်",
     href: "/expenses",
-    icon: ReceiptText,
+    icon: ReceiptIcon,
   },
   {
     title: "Profits",
     subtitle: "အမြတ်အစွန်း",
     href: "/profits",
-    icon: WalletCards,
+    icon: WalletDone02Icon,
   },
   {
     title: "Invoices",
     subtitle: "ဘောင်ချာစရင်းများ",
     href: "/invoices",
-    icon: FileText,
+    icon: FileTextIcon,
   },
 ];
 
@@ -62,7 +63,12 @@ export default function Sidebar() {
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 px-4 py-3 shadow-card backdrop-blur lg:hidden">
         <Link href="/" className="mb-3 flex items-center gap-3">
           <span className="flex size-9 items-center justify-center rounded-lg bg-pink-100 text-pink-700">
-            <Home className="size-5" />
+            <HugeiconsIcon
+              icon={Home01Icon}
+              className="size-5"
+              color="currentColor"
+              strokeWidth={2.2}
+            />
           </span>
           <span className="font-chewy text-2xl">Tiny Gong</span>
         </Link>
@@ -84,7 +90,12 @@ export default function Sidebar() {
                   isActive && "bg-highlight/15 text-hightlight shadow-card",
                 )}
               >
-                <Icon className="size-5" />
+                <HugeiconsIcon
+                  icon={Icon}
+                  className="size-5"
+                  color="currentColor"
+                  strokeWidth={2.2}
+                />
               </Link>
             );
           })}
@@ -121,7 +132,12 @@ export default function Sidebar() {
                 {isActive && (
                   <TwoSparklesIcon className="absolute top-0 right-0 h-6 w-6 text-highlight-soft  group-hover:text-pink-700" />
                 )}
-                <Icon className="size-5 shrink-0" />
+                <HugeiconsIcon
+                  icon={Icon}
+                  className="size-5 shrink-0"
+                  color="currentColor"
+                  strokeWidth={2.2}
+                />
                 <span className="hidden min-w-0 flex-col leading-tight 2xl:flex">
                   <span className="truncate">{item.title}</span>
                   <span className="truncate font-umoe text-xs font-normal opacity-75">

@@ -48,10 +48,8 @@ type PurchaseFormProps = {
 
 const emptyPurchaseValues: PurchaseRecordFormValues = {
   supplier: "",
-  expectedProducts: 0,
-  expectedVariants: 0,
   date: "",
-  totalPrice: 0,
+  totalPrice: null,
   note: null,
 };
 
@@ -70,24 +68,6 @@ const purchaseFields: PurchaseField[] = [
     label: "Purchase Date",
     subLabel: "ဝယ်ယူသည့်ရက်စွဲ",
     type: "date",
-    required: true,
-  },
-  {
-    id: "expected-products",
-    name: "expectedProducts",
-    label: "Expected Products",
-    subLabel: "ဝယ်ယူ ပစ္စည်းအရေအတွက်",
-    type: "number",
-    placeholder: "5",
-    required: true,
-  },
-  {
-    id: "expected-variants",
-    name: "expectedVariants",
-    label: "Expected Variants",
-    subLabel: "ပစ္စည်း မျိူးကွဲများ",
-    type: "number",
-    placeholder: "5",
     required: true,
   },
   {

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/currency";
 import { useDeletePurchase } from "../_hooks/use-purchases";
-import type { PurchaseRecord } from "../_types/purchase";
+import { PurchaseRecord } from "../_schemas/purchase-schema";
 import { DestructiveConfirmation } from "@/components/DestructiveConfirmation";
 import { Button } from "@/components/ui/button";
 import { TableEmptyRow } from "@/components/table/TableEmptyRow";
@@ -40,12 +40,12 @@ export function PurchaseRecordsTable({
     if (hasError)
       return (
         <TableErrorRow
-          colSpan={7}
+          colSpan={5}
           title="Could not load purchases."
           description={errorMessage}
         />
       );
-    if (purchaseRecords.length === 0) return <TableEmptyRow colSpan={7} />;
+    if (purchaseRecords.length === 0) return <TableEmptyRow colSpan={5} />;
 
     return null;
   }
@@ -59,8 +59,6 @@ export function PurchaseRecordsTable({
           <TableRow>
             <TableHead>Purchase ID</TableHead>
             <TableHead>Supplier</TableHead>
-            <TableHead>Products</TableHead>
-            <TableHead>Variants</TableHead>
             <TableHead className="text-right">Total Price</TableHead>
             <TableHead className="text-right">Purchase Date</TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -76,16 +74,10 @@ export function PurchaseRecordsTable({
                     {purchase.supplier}
                   </TableCell>
 
-                  <TableCell className="font-semibold">
-                    {purchase.expectedProducts}
-                  </TableCell>
-
-                  <TableCell className="font-semibold">
-                    {purchase.expectedVariants}
-                  </TableCell>
-
                   <TableCell className="text-right font-semibold">
-                    {formatCurrency(purchase.totalPrice)} MMK
+                    {purchase.totalPrice === null
+                      ? "Not calculated yet"
+                      : `${formatCurrency(purchase.totalPrice)} MMK`}
                   </TableCell>
                   <TableCell className="text-right">{purchase.date}</TableCell>
                   <TableCell>

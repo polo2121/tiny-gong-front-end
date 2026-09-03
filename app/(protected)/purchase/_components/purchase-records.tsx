@@ -1,27 +1,37 @@
 "use client";
 
+// NEXT
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
+// SHARED COMPONENTS
 import DualText from "@/components/DualText";
 import { SearchBar } from "@/components/table/SearchBar";
-
-import { useTableSearch } from "@/components/table/use-table-search";
-import { useUrlFilter } from "@/components/table/use-url-filter";
+import { TableFilter } from "@/components/table/TableFilter";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
+
+// SHARED HOOKS
+import { useTableSearch } from "@/components/table/use-table-search";
+import { useUrlFilter } from "@/components/table/use-url-filter";
+
+// SHARED LIB
 import { parseUrlParams } from "@/lib/url/parse-url-params";
 
+// PURCHASE FEATURE - CONSTANTS
+import { statusOptions } from "../_constants/purchase-filter-options";
+
+// PURCHASE FEATURE - HOOKS
 import { usePurchaseDrawer } from "../_hooks/use-purchase-drawer";
 import { usePurchaseRecords } from "../_hooks/use-purchases";
+
+// SCHEMAS / TYPES
 import { PurchaseRecord } from "../_schemas/purchase-schema";
 import { purchaseRecordFilterSchema } from "../_schemas/purchase-records-filters-schema";
 
+// COMPONENTS
 import { PurchaseForm } from "./PurchaseForm";
 import { PurchaseRecordsTable } from "./purchase-records-table";
-
-import { TableFilter } from "@/components/table/TableFilter";
-import { statusOptions } from "../_constants/purchase-filter-options";
-
 type PurchaseRecordsProps = {
   initialPurchaseRecords: PurchaseRecord[];
 };
@@ -85,8 +95,9 @@ export function PurchaseRecords({
               onValueChange={(value) => updateFilter("status", value)}
             />
           </div>
-
-          <Button onClick={openNewPurchase}>New Purchase</Button>
+          <Button>
+            <Link href="/purchase/new">New Purchase</Link>
+          </Button>
         </div>
       </header>
 

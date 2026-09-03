@@ -10,7 +10,7 @@ import { StatsPeriodSelector } from "@/components/stats/StatsPeriodSelector";
 import type { DashboardPeriod } from "@/components/stats/types";
 
 import { usePurchaseStats } from "../_hooks/use-purchase-stats";
-import { CustomDateFilterValue } from "@/components/filters/CustomDateFilter";
+import type { CustomDateFilterValue } from "@/components/filters/CustomDateFilter";
 import { CustomDateFilter } from "@/components/filters/CustomDateFilter";
 
 const PurchaseStats = () => {
@@ -18,11 +18,20 @@ const PurchaseStats = () => {
   const [customDate, setCustomDate] = useState<CustomDateFilterValue | null>(
     null,
   );
-  const { data: stats, isLoading, isError } = usePurchaseStats(period);
+
+  const {
+    data: stats,
+    isLoading,
+    isError,
+  } = usePurchaseStats({ period, customDate });
 
   function handlePeriodChange(nextPeriod: DashboardPeriod) {
     setPeriod(nextPeriod);
     setCustomDate(null);
+  }
+
+  function handleCustomDateChange(dates: CustomDateFilterValue) {
+    setCustomDate(dates);
   }
 
   return (
@@ -35,7 +44,10 @@ const PurchaseStats = () => {
             isInactive={Boolean(customDate)}
           />
 
-          <CustomDateFilter defaultDates={customDate} onApply={setCustomDate} />
+          <CustomDateFilter
+            defaultDates={customDate}
+            onApply={handleCustomDateChange}
+          />
         </>
       }
     >
@@ -62,28 +74,28 @@ const PurchaseStats = () => {
       {stats && (
         <>
           <StatCard
-            label="Total Amount"
-            subLabel="စုစုပေါင်းငွေပမာဏ"
-            value={formatCurrency(stats.totalAmount)}
-            unit="MMK"
-            tone="teal"
-          />
-          <StatCard
-            label="Purchases"
-            subLabel="ဝယ်ယူမှုအရေအတွက်"
+            label="Total Purchase"
+            subLabel="စုစုပေါင်းဝယ်ယူမှု"
             value={stats.totalPurchases}
             tone="purple"
           />
           <StatCard
-            label="Expected Products"
-            subLabel="မျှော်မှန်းကုန်ပစ္စည်း"
-            value={stats.expectedProducts}
+            label="Purchase Value"
+            subLabel="စုစုပေါင်းငွေပမာဏ"
+            value={formatCurrency(stats.purchaseValue)}
+            unit="MMK"
+            tone="teal"
+          />
+          <StatCard
+            label="Total Products"
+            subLabel="စုစုပေါင်းကုန်ပစ္စည်း"
+            value={stats.totalProducts}
             tone="amber"
           />
           <StatCard
-            label="Registered Products"
-            subLabel="စာရင်းသွင်းပြီးကုန်ပစ္စည်း"
-            value={stats.registeredProducts}
+            label="Total Variants"
+            subLabel="စုစုပေါင်းအမျိုးအစား"
+            value={stats.totalVariants}
             tone="pink"
           />
         </>
