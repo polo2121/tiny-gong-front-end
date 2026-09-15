@@ -111,7 +111,7 @@ export function PurchaseRecords({
 
       <Drawer open={isOpen} onOpenChange={handleOpenChange}>
         <DrawerContent className="m-auto max-w-2xl px-8 py-4">
-          <PurchaseForm purchase={selectedPurchase} onClose={closeDrawer} />
+          {/* <PurchaseForm purchase={selectedPurchase} onClose={closeDrawer} /> */}
         </DrawerContent>
       </Drawer>
     </section>

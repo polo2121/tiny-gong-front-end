@@ -1,12 +1,13 @@
 import React from "react";
+import { PurchaseEditor } from "./_components/PurchaseEditor";
 import PageHeader from "@/components/PageHeader";
 
-import { NewPurchaseView } from "./_components/NewPurchaseView";
-
-export default function page() {
+const page = () => {
   return (
-    <PageHeader title="New Purchase" subtitle="ဝယ်ယူမှုစာရင်း">
-      <NewPurchaseView />
+    <PageHeader title="New Purchase" subtitle="အရောင်းအသစ်">
+      <PurchaseEditor />
     </PageHeader>
   );
-}
+};
+
+export default page;

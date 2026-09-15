@@ -43,7 +43,6 @@ type PurchaseField = {
 
 type PurchaseFormProps = {
   purchase?: PurchaseRecord | null;
-  onClose: () => void;
 };
 
 const emptyPurchaseValues: PurchaseRecordFormValues = {
@@ -91,7 +90,7 @@ const purchaseFields: PurchaseField[] = [
   },
 ];
 
-export function PurchaseForm({ purchase, onClose }: PurchaseFormProps) {
+export function PurchaseForm({ purchase }: PurchaseFormProps) {
   const createPurchase = useCreatePurchase();
   const updatePurchase = useUpdatePurchase();
 
@@ -120,11 +119,11 @@ export function PurchaseForm({ purchase, onClose }: PurchaseFormProps) {
         input,
       });
 
-      return onClose();
+      // return onClose();
     }
 
     await createPurchase.mutateAsync(input);
-    onClose();
+    // onClose();
   }
 
   return (
@@ -212,7 +211,7 @@ export function PurchaseForm({ purchase, onClose }: PurchaseFormProps) {
           variant="outline"
           showIcon={false}
           disabled={isSubmitting}
-          onClick={onClose}
+
         >
           Cancel
         </Button>

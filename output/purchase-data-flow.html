@@ -1,0 +1,82 @@
+<div id="purchase-flow-explorer">
+  <style>
+    #purchase-flow-explorer .flow {display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
+    #purchase-flow-explorer .branch {margin:12px 0 12px 18px;padding-left:16px;border-left:1px solid var(--border)}
+    #purchase-flow-explorer pre {white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0}
+    #purchase-flow-explorer .detail {margin-top:18px}
+    #purchase-flow-explorer .path {overflow-wrap:anywhere}
+  </style>
+  <div class="viz-controls">
+    <label class="form-label">Connections
+      <select class="form-select" id="pf-mode"><option value="current">Current project</option><option value="proposed">Proposed schema source of truth</option></select>
+    </label>
+  </div>
+  <div class="flow" aria-label="Runtime data flow">
+    <button class="btn" data-node="initial">Initial draft</button><span aria-hidden="true">→</span>
+    <button class="btn" data-node="provider">Provider</button><span aria-hidden="true">→</span>
+    <button class="btn" data-node="store">Zustand store</button><span aria-hidden="true">⇄</span>
+    <button class="btn" data-node="ui">Form inputs</button>
+  </div>
+  <div class="branch" aria-label="Data relationships">
+    <button class="btn" data-node="purchase">PurchaseDraft</button>
+    <div class="branch">products[] → <button class="btn" data-node="product">Product</button>
+      <div class="branch">variants[] → <button class="btn" data-node="variant">Variant</button></div>
+      <div class="branch"><span id="pf-image-label">images[] → </span><button class="btn" data-node="images">Images</button></div>
+    </div>
+  </div>
+  <div class="flow"><button class="btn" data-node="schema">Schema → Type</button><button class="btn" data-node="summary">Summary</button></div>
+  <hr>
+  <div class="detail" aria-live="polite">
+    <h3 id="pf-title"></h3><div class="path text-small" id="pf-path"></div>
+    <pre><code id="pf-code"></code></pre>
+    <div id="pf-note"></div>
+  </div>
+  <hr>
+  <div class="viz-controls">
+    <label class="form-label">Try a variant quantity (local simulation)
+      <input class="form-control" id="pf-qty" type="number" value="2" step="1">
+    </label>
+  </div>
+  <pre><code id="pf-state"></code></pre>
+  <div id="pf-result" aria-live="polite"></div>
+</div>
+<script>
+(() => {
+ const root=document.getElementById('purchase-flow-explorer');
+ const el=id=>root.querySelector('#pf-'+id);
+ const base='app/(protected)/purchase/new/';
+ let node='purchase';
+ const current={
+ initial:['Initial draft → provider',base+'_components/NewPurchaseView.tsx','defaultEmptyPurchaseDraft = {\n  purchaseId: randomUUID(),\n  purchaseDate: "", supplierId: "",\n  products: [createEmptyProduct()]\n}','NewPurchaseView passes this object as initialDraft.'],
+ provider:['Provider → one store instance',base+'_context/purchase-draft.context.tsx','createPurchaseDraftStore(initialDraft)\n\nusePurchaseDraft(selector) → useStore(store, selector)','The provider shares the store with its child components.'],
+ store:['Store holds the changing data',base+'_stores/purchase-draft.store.ts','draft: initialDraft\n\nupdateVariantField(productId, variantId, field, value)\n  → variant[field] = value','The action changes a variant inside draft.products. It does not call a Zod parser.'],
+ ui:['Input → action → store → rendered value',base+'_components/products/Variants.tsx','onChange → updateVariantField(\n  productId, variant.id, "qty",\n  Number(event.target.value) || 0\n)','Subscribers receive the changed state; the variant row recomputes qty × unitPrice.'],
+ purchase:['Purchase contains products',base+'_stores/purchase-draft.store.ts','type PurchaseDraft = {\n  purchaseId: string | null;\n  purchaseDate: string;\n  supplierId: string;\n  products: any[];\n}','Currently a handwritten type. products: any[] does not connect this type to productSchema.'],
+ product:['Product contains variants and images','lib/products/schemas/product.schema.ts','productSchema = z.object({\n  id: z.string().min(1), name: z.string(),\n  category: z.string().nullable(),\n  subcategory: z.string().nullable(),\n  images: z.array(productImageSchema),\n  variants: z.array(variantSchema)\n})','This schema exists, but the draft store does not use its inferred Product type for products[].'],
+ variant:['Variant schema → Variant type','lib/products/schemas/variant.schema.ts','variantSchema = z.object({\n  id: z.string().min(1),\n  attributes: z.record(z.string(), z.string()),\n  qty: z.number().int().nonnegative(),\n  unitPrice: z.number().nonnegative()\n})\n\ntype Variant = z.infer<typeof variantSchema>','A type describes valid data during development. Runtime validation requires an explicit parse or safeParse call.'],
+ images:['Image grouping and selection',base+'_components/products/Images.tsx','getImageGroups(variants, ["color"])\n→ [{ group: {color: "red"},\n     variantIds: ["v1", "v2"], images: [] }]\n\nselectedFile: File | null  // component state','The grouping helper now collects variant IDs. The selected file stays in local state; the product schema still uses groupKey and fileName.'],
+ schema:['Schema is a definition, data is a value','lib/products/schemas/variant.schema.ts','Schema: z.number().int().nonnegative()\nType:   number\nData:   2\n\nvariantSchema.safeParse(data) → validation result','Declaring or importing a schema does not automatically validate store updates. TypeScript number also permits negative and fractional numbers.'],
+ summary:['Summary receives separate sample products',base+'_components/NewPurchaseView.tsx','<PurchaseDraftSummary products={products} />\n\n// products is the sample array in this file','The summary is not currently fed by draft.products. PurchaseDraftPreview does subscribe to the draft.']
+ };
+ const proposed={
+ purchase:['Purchase schema → product schema','app/(protected)/purchase/_schemas/purchase-draft.schema.ts','purchaseDraftSchema = z.object({\n  purchaseId: z.string().nullable(),\n  purchaseDate: z.string(), supplierId: z.string(),\n  products: z.array(draftProductSchema)\n})\ntype PurchaseDraft = z.infer<typeof purchaseDraftSchema>','Proposed: the purchase feature imports the product schema. The store imports this inferred PurchaseDraft type.'],
+ product:['Product schema composes child schemas','lib/products/schemas/product.schema.ts','draftProductSchema = z.object({\n  id: z.string().min(1), name: z.string(),\n  category: z.string().nullable(),\n  subcategory: z.string().nullable(),\n  variants: z.array(draftVariantSchema),\n  imageGroups: z.array(imageGroupSchema)\n})','Proposed: draft.products is typed as DraftProduct[].'],
+ images:['Image group → variant IDs + image objects','lib/products/schemas/image-group.schema.ts','imageGroupSchema = z.object({\n  group: z.record(z.string(), z.string()),\n  variantIds: z.array(z.string()),\n  images: z.array(productImageSchema)\n})\n\nproductImageSchema = z.object({\n  id: z.string(), url: z.string(), fileName: z.string()\n})','Proposed: uploads update the matching group in the draft. variantIds reference variants in the same product.'],
+ store:['Typed state + explicit validation boundary',base+'_stores/purchase-draft.store.ts','import type { PurchaseDraft } from\n  "../../_schemas/purchase-draft.schema";\n\n// At a chosen validation boundary:\nconst result = purchaseDraftSchema.safeParse(draft);','Proposed: inferred types guide edits; an explicit parser validates runtime data. Submission rules can be stricter than draft rules.'],
+ summary:['Summary subscribes to the same draft',base+'_components/purchase/PurchaseDraftSummary.tsx','const products = usePurchaseDraft(\n  state => state.draft.products\n);','Proposed: editing a quantity updates both the variant row and purchase summary from the same state.']
+ };
+ function draw(){
+  const isProposed=el('mode').value==='proposed';
+  const d=(isProposed&&proposed[node])||current[node];
+  el('title').textContent=d[0];el('path').textContent=d[1];el('code').textContent=d[2];el('note').textContent=d[3];
+  el('image-label').textContent=isProposed?'imageGroups[] → ':'images[] → ';
+  root.querySelectorAll('[data-node]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.node===node)));
+  const qty=Number(el('qty').value)||0;
+  el('state').textContent='draft.products[0].variants[0].qty = '+qty+'\nVariant subtotal at unitPrice 5 = '+qty*5;
+  const valid=Number.isInteger(qty)&&qty>=0;
+  el('result').textContent=isProposed?('Explicit schema check: '+(valid?'valid quantity':'invalid — quantity must be a nonnegative integer')+' · proposed summary uses this draft quantity.'):'Current store action: assigns the number without schema validation · purchase summary still uses sample products.';
+ }
+ root.querySelectorAll('[data-node]').forEach(b=>b.addEventListener('click',()=>{node=b.dataset.node;draw()}));
+ el('mode').addEventListener('change',draw);el('qty').addEventListener('input',draw);draw();
+})();
+</script>

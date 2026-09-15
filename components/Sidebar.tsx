@@ -102,7 +102,7 @@ export default function Sidebar() {
         </nav>
       </header>
 
-      <aside className="sticky top-0 hidden h-screen w-18 shrink-0 bg-teal-50/30 px-3 py-6 backdrop-blur transition-[width] duration-200 ease-out lg:flex lg:flex-col 2xl:w-50 2xl:px-4">
+      <aside className="sticky top-0 hidden h-screen w-16 shrink-0 bg-teal-50/30 px-2 py-6 backdrop-blur transition-[width] duration-200 ease-out lg:flex lg:flex-col 2xl:w-44 2xl:px-3">
         <Link
           href="/"
           className="mb-8 flex justify-center items-center rounded-lg transition bg-gray-50"
@@ -124,7 +124,7 @@ export default function Sidebar() {
                 title={item.title}
                 aria-label={item.title}
                 className={cn(
-                  "group relative flex items-center justify-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-slate-700 transition ease-in 2xl:justify-start",
+                  "group relative flex items-center justify-center gap-2 rounded-lg px-2 py-3 text-sm font-semibold text-slate-700 transition ease-in 2xl:justify-start",
                   "hover:bg-pink-50 hover:text-pink-700 hover:scale-105",
                   isActive && "bg-card-surface text-foreground shadow-card",
                 )}
