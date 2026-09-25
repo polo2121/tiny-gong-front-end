@@ -6,7 +6,10 @@ import type { CodeGraph, CodeNode, Kind } from "./types";
 // Explicit source scope: no arbitrary paths, environment files, or runtime execution.
 const roots = ["app/(protected)/purchase/new", "app/(protected)/purchase/_schemas", "app/(protected)/purchase/_helpers", "lib/categories"];
 async function collect(dir: string): Promise<string[]> {
-  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const entries = await fs.readdir(dir, { withFileTypes: true }).catch((error: NodeJS.ErrnoException) => {
+    if (error.code === "ENOENT") return [];
+    throw error;
+  });
   return (await Promise.all(entries.map(e => e.isDirectory() ? collect(`${dir}/${e.name}`) : /\.[jt]sx?$/.test(e.name) ? [`${dir}/${e.name}`] : []))).flat();
 }
 export async function scanPurchase(): Promise<CodeGraph> {

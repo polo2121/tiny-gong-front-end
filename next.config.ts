@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
+import { readdirSync } from "node:fs";
+import path from "node:path";
+
+const protectedSections = readdirSync(path.join(process.cwd(), "app/(protected)"), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && !entry.name.startsWith("_"))
+  .map((entry) => entry.name);
 
 const nextConfig: NextConfig = {
+  env: { NEXT_PUBLIC_PROTECTED_SECTIONS: JSON.stringify(protectedSections) },
   turbopack: {},
   webpack(config) {
     // Grab the existing rule that handles SVG imports

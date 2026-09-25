@@ -1,4 +1,4 @@
-import { PURCHASE_ERROR_MESSAGES } from "@/app/(protected)/purchase/_errors/purchase-error-messages";
+import { PURCHASE_ERROR_MESSAGES } from "@/lib/errors/purchase-error-messages";
 
 export const FEATURE_ERROR_MESSAGES = {
   ...PURCHASE_ERROR_MESSAGES,

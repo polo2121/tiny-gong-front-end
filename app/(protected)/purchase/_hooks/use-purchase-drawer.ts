@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { PurchaseRecordFormValues ,PurchaseRecord} from "../prev-new/schema/new-purchase-schema";
+import { PurchaseRecordFormValues ,PurchaseRecord} from "@/lib/purchase-draft/new-purchase-schema";
 
 export function usePurchaseDrawer() {
   const [isOpen, setIsOpen] = useState(false);

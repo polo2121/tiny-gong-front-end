@@ -19,7 +19,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ProductDraft } from "../../schema/new-purchase-schema";
+import { ProductDraft } from "@/lib/purchase-draft/new-purchase-schema";
 
 export function ProductList() {
   const [openItems, setItemsOpen] = useState<string[]>(["product-0"]);

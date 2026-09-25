@@ -17,7 +17,7 @@ import {
   getCategoryOptions,
   getSubcategoryOptions,
 } from "@/lib/categories/helpers";
-import { ProductDraft } from "../../schema/new-purchase-schema";
+import { ProductDraft } from "@/lib/purchase-draft/new-purchase-schema";
 
 type IdentityProps = {
   product: ProductDraft;

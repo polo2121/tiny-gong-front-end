@@ -11,7 +11,7 @@ import {
   ProductDraft,
   VariantDraft,
   type PurchaseDraft,
-} from "../schema/new-purchase-schema";
+} from "@/lib/purchase-draft/new-purchase-schema";
 
 export type PurchaseDraftStore = {
   draft: PurchaseDraft;

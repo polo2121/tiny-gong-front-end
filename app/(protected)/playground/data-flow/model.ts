@@ -1,5 +1,5 @@
-import { productDraftSchema, productImageSchema, variantDraftSchema } from "../../purchase/prev-new/schema/new-purchase-schema";
-export { productImageSchema as proposedImageSchema, imageGroupSchema as proposedGroupSchema, productDraftSchema as proposedProductSchema, purchaseDraftSchema as proposedPurchaseSchema } from "../../purchase/prev-new/schema/new-purchase-schema";
+import { productDraftSchema, productImageSchema, variantDraftSchema } from "@/lib/purchase-draft/new-purchase-schema";
+export { productImageSchema as proposedImageSchema, imageGroupSchema as proposedGroupSchema, productDraftSchema as proposedProductSchema, purchaseDraftSchema as proposedPurchaseSchema } from "@/lib/purchase-draft/new-purchase-schema";
 
 export const schemas = { product: productDraftSchema, variant: variantDraftSchema, image: productImageSchema };
 export type NodeId = "purchase" | "product" | "variant" | "group" | "image";

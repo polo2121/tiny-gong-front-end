@@ -1,12 +1,12 @@
 "use client";
 
 import { createContext, useContext, useRef, type ReactNode } from "react";
-import type { PurchaseDraft } from "../schema/new-purchase-schema";
+import type { PurchaseDraft } from "@/lib/purchase-draft/new-purchase-schema";
 
 import {
   createPurchaseDraftStore,
   type PurchaseDraftStore,
-} from "../_stores/purchase-draft.store";
+} from "@/lib/purchase-draft/purchase-draft.store";
 
 import { useStore, type StoreApi } from "zustand";
 

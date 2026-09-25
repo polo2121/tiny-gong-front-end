@@ -1,5 +1,7 @@
 "use client";
 
+import { isSectionAvailable } from "@/lib/available-sections";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -74,7 +76,7 @@ export default function Sidebar() {
         </Link>
 
         <nav className="flex gap-2 overflow-x-auto pb-1">
-          {navItems.map((item) => {
+          {navItems.filter((item) => isSectionAvailable(item.href)).map((item) => {
             const Icon = item.icon;
             const isActive =
               pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -112,7 +114,7 @@ export default function Sidebar() {
         </Link>
 
         <nav className="flex flex-1 flex-col gap-2">
-          {navItems.map((item) => {
+          {navItems.filter((item) => isSectionAvailable(item.href)).map((item) => {
             const Icon = item.icon;
             const isActive =
               pathname === item.href || pathname.startsWith(`${item.href}/`);

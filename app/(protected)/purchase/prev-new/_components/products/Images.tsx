@@ -2,6 +2,8 @@
 
 import { ChangeEvent, useMemo, useState } from "react";
 
+import { getImageGroups } from "@/lib/purchase-draft/image-groups";
+
 import DualText from "@/components/DualText";
 import { ImageUploadIcon } from "@/components/icons/ImageUploadIcon";
 
@@ -9,7 +11,7 @@ import type {
   ImageGroup,
   ProductImage,
   VariantDraft,
-} from "../../schema/new-purchase-schema";
+} from "@/lib/purchase-draft/new-purchase-schema";
 
 const MAX_IMAGE_SIZE = 1024 * 1024;
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
@@ -33,37 +35,7 @@ type ImageUploadCardProps = {
 // Grouping
 // -----------------------------------------------------------------------------
 
-export function getImageGroups(
-  variants: VariantDraft[],
-  imagesGroupByAttributes: string[],
-): ImageGroup[] {
-  const groups = new Map<string, ImageGroup>();
-
-  for (const variant of variants) {
-    const group = Object.fromEntries(
-      imagesGroupByAttributes.map((attribute) => [
-        attribute,
-        variant.attributes?.[attribute] ?? "",
-      ]),
-    );
-
-    const key = JSON.stringify(group);
-    const existingGroup = groups.get(key);
-
-    if (existingGroup) {
-      existingGroup.variantIds.push(variant.id);
-      continue;
-    }
-
-    groups.set(key, {
-      group,
-      variantIds: [variant.id],
-      image: null,
-    });
-  }
-
-  return Array.from(groups.values());
-}
+export { getImageGroups } from "@/lib/purchase-draft/image-groups";
 
 // -----------------------------------------------------------------------------
 // Images

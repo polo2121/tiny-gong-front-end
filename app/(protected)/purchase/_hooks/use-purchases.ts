@@ -8,7 +8,7 @@ import {
   fetchPurchaseList,
   updatePurchase,
 } from "../_services/purchase-api";
-import { PurchaseRecord } from "../prev-new/schema/new-purchase-schema";
+import { PurchaseRecord } from "@/lib/purchase-draft/new-purchase-schema";
 import { notify } from "@/lib/notify";
 import { PurchaseRecordFilters }  from "../_schemas/purchase-records-filters-schema"
 

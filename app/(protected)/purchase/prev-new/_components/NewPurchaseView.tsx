@@ -1,11 +1,11 @@
-import { createEmptyProduct } from "../_stores/purchase-draft.store";
+import { createEmptyProduct } from "@/lib/purchase-draft/purchase-draft.store";
 import { PurchaseDraftProvider } from "../_context/purchase-draft.context";
 import PurchaseDraftPreview from "./PurchaseDraftPreview";
 import { ProductList } from "./products/ProductList";
 import { PurchaseDraftSummary } from "./purchase/PurchaseDraftSummary";
 
 import { randomUUID } from "node:crypto";
-import { ProductPreview } from "@/app/(protected)/playground/product-preview/ProductPreview";
+import { ProductPreview } from "@/components/products/ProductPreview";
 import { VariantTable } from "@/components/products/VariantTable";
 
 const defaultEmptyPurchaseDraft = {

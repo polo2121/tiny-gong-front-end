@@ -14,8 +14,8 @@ import {
   proposedPurchaseSchema,
   type NodeId,
 } from "./model";
-import { getImageGroups } from "../../purchase/prev-new/_components/products/Images";
-import { createPurchaseDraftStore } from "../../purchase/prev-new/_stores/purchase-draft.store";
+import { getImageGroups } from "@/lib/purchase-draft/image-groups";
+import { createPurchaseDraftStore } from "@/lib/purchase-draft/purchase-draft.store";
 import { useStore } from "zustand";
 
 const button =

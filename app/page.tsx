@@ -1,3 +1,5 @@
+
+import { isSectionAvailable } from "@/lib/available-sections";
 import {
   Boxes,
   ChartNoAxesCombined,
@@ -166,7 +168,7 @@ export default function Home() {
           </header>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {items.map((item) => (
+            {items.filter((item) => isSectionAvailable(item.href)).map((item) => (
               <NavCard
                 key={item.title}
                 href={item.href}

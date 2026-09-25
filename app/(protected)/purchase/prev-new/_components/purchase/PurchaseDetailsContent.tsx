@@ -3,7 +3,7 @@ import DualText from "@/components/DualText";
 import { formatCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 
-import type { PurchaseRecord } from "../../schema/new-purchase-schema";
+import type { PurchaseRecord } from "@/lib/purchase-draft/new-purchase-schema";
 import { Input } from "@/components/ui/input";
 import {
   Field,

@@ -3,11 +3,11 @@ import path from "node:path";
 import DataFlowExplorer from "./visualizer";
 
 const files = {
-  purchase: "app/(protected)/purchase/_schemas/purchase-schema.ts",
-  product: "app/(protected)/purchase/_schemas/purchase-schema.ts",
-  variant: "app/(protected)/purchase/_schemas/purchase-schema.ts",
-  group: "app/(protected)/purchase/new/_components/products/Images.tsx",
-  image: "app/(protected)/purchase/_schemas/purchase-schema.ts",
+  purchase: "lib/purchase-draft/new-purchase-schema.ts",
+  product: "lib/purchase-draft/new-purchase-schema.ts",
+  variant: "lib/purchase-draft/new-purchase-schema.ts",
+  group: "lib/purchase-draft/image-groups.ts",
+  image: "lib/purchase-draft/new-purchase-schema.ts",
 };
 
 export default async function DataFlowPage() {

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/currency";
 import { usePurchaseDraft } from "../../_context/purchase-draft.context";
 
-import type { VariantDraft } from "../../schema/new-purchase-schema";
+import type { VariantDraft } from "@/lib/purchase-draft/new-purchase-schema";
 
 interface VariantsProps {
   productId: string;
