@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { CalendarDays } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -20,10 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-export type CustomDateFilterValue = {
-  from: string;
-  to: string;
-};
+import type { CustomDateFilterValue } from "@/components/stats/types";
 
 type CustomDateFilterProps = {
   defaultDates?: CustomDateFilterValue | null;
@@ -40,6 +37,7 @@ export function CustomDateFilter({
   className,
   onApply,
 }: CustomDateFilterProps) {
+  const fieldId = useId();
   const [isOpen, setIsOpen] = useState(false);
   const [fromDate, setFromDate] = useState(defaultDates?.from ?? "");
   const [toDate, setToDate] = useState(defaultDates?.to ?? "");
@@ -124,14 +122,14 @@ export function CustomDateFilter({
               <Field>
                 <div className="relative bg-white/80 shadow-card rounded-full">
                   <FieldLabel
-                    htmlFor="custom-date-from"
+                    htmlFor={`${fieldId}-from`}
                     className="pointer-events-none absolute left-4 top-2 z-10 text-xs opacity-60"
                   >
                     From
                   </FieldLabel>
 
                   <Input
-                    id="custom-date-from"
+                    id={`${fieldId}-from`}
                     type="date"
                     className="bg-transparent pt-4 pl-4"
                     value={fromDate}
@@ -148,13 +146,13 @@ export function CustomDateFilter({
             <Field data-invalid={Boolean(errorMessage)}>
               <div className="relative bg-white/80 shadow-card rounded-full">
                 <FieldLabel
-                  htmlFor="custom-date-to"
+                  htmlFor={`${fieldId}-to`}
                   className="pointer-events-none absolute left-4 top-2 z-10 text-xs opacity-60"
                 >
                   To
                 </FieldLabel>
                 <Input
-                  id="custom-date-to"
+                  id={`${fieldId}-to`}
                   type="date"
                   className="bg-transparent pt-4 pl-4"
                   value={toDate}

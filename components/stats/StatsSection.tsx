@@ -4,8 +4,6 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-export type { DashboardPeriod } from "./types";
-
 type StatsSectionProps = {
   children: ReactNode;
   controls?: ReactNode;

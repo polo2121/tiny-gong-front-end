@@ -3,7 +3,7 @@
 import { OneSparkleIcon } from "@/components/icons/OneSparkleIcon";
 import { cn } from "@/lib/utils";
 
-import type { DashboardPeriod } from "./types";
+import type { DashboardPeriod } from "@/components/stats/types";
 
 type StatsPeriod = {
   label: string;
@@ -16,7 +16,7 @@ type StatsPeriodSelectorProps = {
   isInactive?: boolean;
 };
 
-const periods: StatsPeriod[] = [
+export const periods: StatsPeriod[] = [
   { label: "Today", value: "today" },
   { label: "Last 7 Days", value: "week" },
   { label: "Last Month", value: "month" },
